@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameLicense Pro VN - Hệ thống lập hồ sơ & Hướng dẫn nộp G1, G2, G3, G4</title>
+    <title>GameLicense Pro VN - Hệ thống lập hồ sơ, SHTT & Hướng dẫn nộp G1-G4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
@@ -63,7 +63,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-white text-base leading-tight">GameLicense Pro VN</h1>
-                    <p class="text-xs text-slate-400">Hệ thống lập hồ sơ & Hướng dẫn nộp thủ tục phát hành Game G1, G2, G3, G4</p>
+                    <p class="text-xs text-slate-400">Hệ thống lập hồ sơ phát hành, SHTT bản quyền & Hướng dẫn nộp online</p>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                     <i class="fa-solid fa-file-lines"></i> Xem Trước Bản In
                 </button>
                 <button type="button" onclick="switchView('guide')" id="navBtnGuide" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question"></i> Quy Trình & Hướng Dẫn Nộp
+                    <i class="fa-solid fa-circle-question"></i> Hướng Dẫn Nộp Chính Phủ
                 </button>
                 <button type="button" onclick="exportToWord()" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 transition flex items-center gap-2 shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-file-word"></i> Xuất File Word
@@ -85,20 +85,23 @@
         </div>
     </header>
 
-    <!-- Sub-Navbar cho các loại Giấy tờ / Game (G1, G2, G3, G4) -->
+    <!-- Sub-Navbar cho các loại Giấy tờ / Game (G1, G2, G3, G4 & SHTT) -->
     <div class="bg-[#0f172a]/80 border-b border-slate-800/80 backdrop-blur">
         <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2">
-            <button type="button" onclick="switchGameTab('G1')" id="tabBtnG1" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow">
-                <i class="fa-solid fa-server"></i> Game G1 (Tương tác mạng)
+            <button type="button" onclick="switchGameTab('G1')" id="tabBtnG1" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow">
+                <i class="fa-solid fa-server"></i> Game G1
             </button>
-            <button type="button" onclick="switchGameTab('G2')" id="tabBtnG2" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
-                <i class="fa-solid fa-network-wired"></i> Game G2 (Người chơi - Máy chủ)
+            <button type="button" onclick="switchGameTab('G2')" id="tabBtnG2" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-network-wired"></i> Game G2
             </button>
-            <button type="button" onclick="switchGameTab('G3')" id="tabBtnG3" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
-                <i class="fa-solid fa-users"></i> Game G3 (Nhiều người chơi nội bộ)
+            <button type="button" onclick="switchGameTab('G3')" id="tabBtnG3" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-users"></i> Game G3
             </button>
-            <button type="button" onclick="switchGameTab('G4')" id="tabBtnG4" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
-                <i class="fa-solid fa-laptop-code"></i> Game G4 (Offline / Tải về máy)
+            <button type="button" onclick="switchGameTab('G4')" id="tabBtnG4" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-laptop-code"></i> Game G4
+            </button>
+            <button type="button" onclick="switchGameTab('SHTT')" id="tabBtnSHTT" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-amber-300 hover:bg-slate-700 flex items-center gap-2 shrink-0 border border-amber-500/40">
+                <i class="fa-solid fa-shield-halved text-amber-400"></i> Bản Quyền SHTT (Copyright)
             </button>
         </div>
     </div>
@@ -111,47 +114,47 @@
             <div class="bg-slate-900 border border-slate-800 px-5 py-3 rounded-xl flex items-center justify-between">
                 <div>
                     <h2 id="currentTabTitle" class="text-base font-bold text-emerald-400">Hồ sơ đề nghị cấp Giấy phép phát hành Trò chơi G1</h2>
-                    <p class="text-xs text-slate-400">Toàn bộ thông tin dưới đây hoàn toàn trống để bạn tự điền mới hoặc sao chép dữ liệu doanh nghiệp.</p>
+                    <p class="text-xs text-slate-400">Toàn bộ thông tin dưới đây hoàn toàn trống để bạn tự điền mới hoặc sao chép dữ liệu.</p>
                 </div>
                 <button type="button" onclick="clearAllFields()" class="text-xs text-rose-400 hover:underline px-3 py-1.5 bg-rose-950/40 border border-rose-900/50 rounded-lg">
                     Xóa trống tất cả
                 </button>
             </div>
 
-            <!-- Phần I: Thông tin Doanh nghiệp -->
+            <!-- Phần I: Thông tin Chủ thể / Doanh nghiệp -->
             <div class="section-card">
                 <button type="button" onclick="toggleAccordion('sec1')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-building text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần I: Thông Tin Doanh Nghiệp & Pháp Lý</span>
+                        <span class="font-bold text-base text-white">Phần I: Thông Tin Chủ Thể Quyền / Doanh Nghiệp</span>
                     </div>
                     <i id="icon-sec1" class="fa-solid fa-chevron-up text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec1" class="p-6 space-y-4 border-t border-slate-800/80">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên doanh nghiệp phát hành *</label>
-                            <input type="text" id="companyName" class="input-dark text-sm" placeholder="VD: CÔNG TY TNHH ...">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên chủ sở hữu / Doanh nghiệp *</label>
+                            <input type="text" id="companyName" class="input-dark text-sm" placeholder="VD: CÔNG TY TNHH ... hoặc Tên Tác Giả">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Mã số doanh nghiệp / MST *</label>
-                            <input type="text" id="taxCode" class="input-dark text-sm" placeholder="VD: 031xxxxxxx">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Mã số doanh nghiệp / CCCD tác giả *</label>
+                            <input type="text" id="taxCode" class="input-dark text-sm" placeholder="VD: 031xxxxxxx hoặc Số CCCD">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Người đại diện theo pháp luật *</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Người đại diện / Tác giả trực tiếp *</label>
                             <input type="text" id="legalRep" class="input-dark text-sm" placeholder="VD: Nguyễn Văn A">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Chức vụ *</label>
-                            <input type="text" id="repTitle" class="input-dark text-sm" placeholder="VD: Giám đốc / Tổng Giám đốc">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Chức vụ / Tư cách pháp lý *</label>
+                            <input type="text" id="repTitle" class="input-dark text-sm" placeholder="VD: Giám đốc / Tác giả kiêm Chủ sở hữu">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Địa chỉ trụ sở chính *</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Địa chỉ liên hệ chính *</label>
                             <input type="text" id="companyAddress" class="input-dark text-sm" placeholder="VD: Số nhà, Đường, Phường/Xã, Quận/Huyện, Tỉnh/Thành phố">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Số Giấy phép cung cấp dịch vụ G1 (nếu có)</label>
-                            <input type="text" id="licenseNumber" class="input-dark text-sm" placeholder="VD: Số ... /GP-BTTTT">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Số Giấy phép / Số ĐK quyền tác giả (nếu có)</label>
+                            <input type="text" id="licenseNumber" class="input-dark text-sm" placeholder="VD: Số ... /GP-BTTTT hoặc GCN...">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Điện thoại & Email liên hệ *</label>
@@ -161,99 +164,99 @@
                 </div>
             </div>
 
-            <!-- Phần II: Phân Loại & Nội Dung Trò Chơi -->
+            <!-- Phần II: Phân Loại & Nội Dung / Tác Phẩm Game -->
             <div class="section-card">
                 <button type="button" onclick="toggleAccordion('sec2')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-dice-d20 text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần II: Phân Loại & Kịch Bản Chi Tiết Trò Chơi</span>
+                        <span class="font-bold text-base text-white">Phần II: Thông Tin Chi Tiết Tác Phẩm / Trò Chơi</span>
                     </div>
                     <i id="icon-sec2" class="fa-solid fa-chevron-up text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec2" class="p-6 space-y-4 border-t border-slate-800/80">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên trò chơi (Tiếng Việt & Quốc tế) *</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên trò chơi / Tên tác phẩm *</label>
                             <input type="text" id="gameName" class="input-dark text-sm" placeholder="VD: Tên Game (English Name)">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân nhóm trò chơi *</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân nhóm thủ tục *</label>
                             <input type="text" id="gameGroupInput" class="input-dark text-sm" value="G1 - Trò chơi có sự tương tác giữa nhiều người chơi thông qua hệ thống máy chủ" readonly>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân loại độ tuổi *</label>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân loại độ tuổi / Hình thức *</label>
                             <select id="ageRating" class="input-dark text-sm">
-                                <option value="18+ (Dành cho người trưởng thành từ 18 tuổi trở lên)">18+ (Từ 18 tuổi trở lên)</option>
+                                <option value="18+ (Dành cho người trưởng thành từ 18 tuổi trở lên)">18+ (Dành cho người lớn)</option>
                                 <option value="16+ (Dành cho thanh thiếu niên từ 16 tuổi trở lên)">16+ (Từ 16 tuổi trở lên)</option>
                                 <option value="12+ (Dành cho trẻ em từ 12 tuổi trở lên)">12+ (Từ 12 tuổi trở lên)</option>
                                 <option value="00+ / K (Phù hợp với mọi lứa tuổi)">00+ / K (Mọi lứa tuổi)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Nền tảng phát hành *</label>
-                            <input type="text" id="gamePlatforms" class="input-dark text-sm" placeholder="VD: Android, iOS, PC Web/Client">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Nền tảng phát hành / Công bố *</label>
+                            <input type="text" id="gamePlatforms" class="input-dark text-sm" placeholder="VD: Android, iOS, PC, Source Code / Đồ họa 2D">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Nguồn gốc bản quyền / Hợp đồng ủy quyền *</label>
-                            <input type="text" id="copyrightInfo" class="input-dark text-sm" placeholder="VD: Tự sản xuất / Hợp đồng chuyển nhượng bản quyền số...">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Nguồn gốc bản quyền / Tác giả sáng tạo *</label>
+                            <input type="text" id="copyrightInfo" class="input-dark text-sm" placeholder="VD: Do tác giả trực tiếp sáng tạo 100% bằng mã nguồn C# / Unity">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Cốt truyện & Bối cảnh trò chơi *</label>
-                        <textarea id="gameStory" rows="4" class="input-dark text-sm" placeholder="Nhập mô tả cốt truyện, bối cảnh, nhân vật..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelStory">Cốt truyện & Bối cảnh trò chơi *</label>
+                        <textarea id="gameStory" rows="4" class="input-dark text-sm" placeholder="Nhập mô tả cốt truyện, bối cảnh, nhân vật hoặc nội dung chi tiết của phần mềm/tác phẩm..."></textarea>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Mô tả chi tiết Gameplay & Tính năng tương tác *</label>
-                        <textarea id="gamePlay" rows="4" class="input-dark text-sm" placeholder="Nhập các tính năng tương tác, PvP, Bang hội, nhiệm vụ..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelPlay">Mô tả chi tiết Gameplay & Tính năng tương tác *</label>
+                        <textarea id="gamePlay" rows="4" class="input-dark text-sm" placeholder="Nhập các tính năng kỹ thuật, cấu trúc mã nguồn, tính năng tương tác..."></textarea>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án kiểm soát nội dung, chống bạo lực & tuân thủ độ tuổi *</label>
-                        <textarea id="contentControl" rows="3" class="input-dark text-sm" placeholder="Nhập biện pháp lọc chat, cảnh báo độ tuổi, giới hạn giờ chơi..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelControl">Phương án kiểm soát nội dung, chống bạo lực & tuân thủ độ tuổi *</label>
+                        <textarea id="contentControl" rows="3" class="input-dark text-sm" placeholder="Nhập biện pháp bảo vệ bản quyền, chống sao chép hoặc kiểm soát nội dung..."></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Phần III: Đề Án Kỹ Thuật & Hạ Tầng Máy Chủ -->
+            <!-- Phần III: Đề Án Kỹ Thuật & Cam Kết Bản Quyền -->
             <div class="section-card">
                 <button type="button" onclick="toggleAccordion('sec3')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-server text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần III: Đề Án Kỹ Thuật & Hạ Tầng Máy Chủ</span>
+                        <span class="font-bold text-base text-white" id="sec3Title">Phần III: Đề Án Kỹ Thuật & Hạ Tầng Máy Chủ</span>
                     </div>
                     <i id="icon-sec3" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec3" class="p-6 space-y-4 border-t border-slate-800/80 hidden">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Thông tin hệ thống máy chủ & Nhà cung cấp hạ tầng (ISP/Datacenter) *</label>
-                        <textarea id="serverInfo" rows="3" class="input-dark text-sm" placeholder="Nhập tên nhà cung cấp Datacenter tại Việt Nam, cấu hình phần cứng, vị trí lưu trữ CSDL..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelSec3_1">Thông tin hệ thống máy chủ & Nhà cung cấp hạ tầng (ISP/Datacenter) *</label>
+                        <textarea id="serverInfo" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin hạ tầng máy chủ hoặc định dạng mã nguồn lưu trữ..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án đảm bảo an toàn thông tin, an ninh mạng & Sao lưu dự phòng *</label>
-                        <textarea id="securityPlan" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin tường lửa, mã hóa dữ liệu, lịch sử sao lưu..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelSec3_2">Phương án đảm bảo an toàn thông tin, an ninh mạng & Sao lưu dự phòng *</label>
+                        <textarea id="securityPlan" rows="3" class="input-dark text-sm" placeholder="Nhập phương án bảo mật bản quyền, chống xâm phạm sở hữu trí tuệ..."></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Phần IV: Phương Án Thanh Toán & Nhân Sự Vận Hành -->
+            <!-- Phần IV: Phương Án Tài Chính & Vận Hành -->
             <div class="section-card">
                 <button type="button" onclick="toggleAccordion('sec4')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-credit-card text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần IV: Phương Án Thanh Toán & Nhân Sự Vận Hành</span>
+                        <span class="font-bold text-base text-white" id="sec4Title">Phần IV: Phương Án Thanh Toán & Nhân Sự Vận Hành</span>
                     </div>
                     <i id="icon-sec4" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec4" class="p-6 space-y-4 border-t border-slate-800/80 hidden">
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án thu phí, vật phẩm ảo & Quản lý đơn vị quy đổi *</label>
-                        <textarea id="paymentPlan" rows="3" class="input-dark text-sm" placeholder="Nhập quy định về đơn vị ảo, cổng thanh toán hợp pháp..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelSec4_1">Phương án thu phí, vật phẩm ảo & Quản lý đơn vị quy đổi *</label>
+                        <textarea id="paymentPlan" rows="3" class="input-dark text-sm" placeholder="Nhập phương án thương mại hóa hoặc khai thác bản quyền..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Nhân sự quản trị & Quy trình giải quyết khiếu nại khách hàng *</label>
-                        <textarea id="supportPlan" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin bộ phận CSKH, thời gian phản hồi khiếu nại..."></textarea>
+                        <label class="block text-xs font-medium text-slate-300 mb-1.5" id="labelSec4_2">Nhân sự quản trị & Quy trình giải quyết khiếu nại khách hàng *</label>
+                        <textarea id="supportPlan" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin nhân sự phát triển, cam kết quyền tác giả..."></textarea>
                     </div>
                 </div>
             </div>
@@ -263,14 +266,14 @@
                 <button type="button" onclick="toggleAccordion('sec5')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-images text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần V: Hệ Thống Gán Ảnh Minh Họa & Sơ Đồ Kiến Trúc</span>
+                        <span class="font-bold text-base text-white">Phần V: Hệ Thống Gán Ảnh Minh Họa & Sơ Đồ Đính Kèm</span>
                     </div>
                     <i id="icon-sec5" class="fa-solid fa-chevron-up text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec5" class="p-6 space-y-5 border-t border-slate-800/80">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
                         <h3 class="text-sm font-semibold text-emerald-400 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Thêm hình ảnh vào hồ sơ (Sơ đồ mạng, ảnh màn hình cảnh báo 18+, nhân vật, vật phẩm...)
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Thêm hình ảnh vào hồ sơ (Giao diện game, mã nguồn, giấy chứng nhận, sơ đồ...)
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div>
@@ -284,10 +287,10 @@
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">2. Thuộc danh mục phụ lục</label>
                                 <select id="imgCategoryInput" class="input-dark text-xs">
-                                    <option value="Sơ đồ hệ thống thiết bị & Kết nối mạng">Sơ đồ hệ thống & Kết nối mạng</option>
-                                    <option value="Giao diện đăng nhập & Khuyến cáo độ tuổi (18+)">Giao diện đăng nhập & Cảnh báo độ tuổi</option>
-                                    <option value="Hình ảnh nhân vật, bản đồ & vật phẩm trong game">Hình ảnh nhân vật, bản đồ & vật phẩm</option>
-                                    <option value="Giao diện tính năng tương tác & Thanh toán">Giao diện tương tác & Thanh toán</option>
+                                    <option value="Sơ đồ hệ thống thiết bị & Kết nối mạng">Sơ đồ hệ thống / Kiến trúc</option>
+                                    <option value="Giao diện đăng nhập & Khuyến cáo độ tuổi (18+) / Giao diện tác phẩm">Giao diện trò chơi / Tác phẩm</option>
+                                    <option value="Hình ảnh nhân vật, bản đồ & vật phẩm trong game">Hình ảnh nhân vật, đồ họa & tài sản game</option>
+                                    <option value="Trích đoạn mã nguồn / Sơ đồ thuật toán phần mềm">Trích đoạn mã nguồn phần mềm (Source Code)</option>
                                 </select>
                             </div>
                         </div>
@@ -307,7 +310,7 @@
                         <div class="flex flex-col sm:flex-row gap-3 items-end">
                             <div class="flex-1 w-full">
                                 <label class="block text-xs text-slate-400 mb-1">3. Chú thích chi tiết cho bức ảnh (sẽ in dưới ảnh trong file Word) *</label>
-                                <input type="text" id="imgCaptionInput" placeholder="VD: Hình 1 - Sơ đồ tổng quát kiến trúc hệ thống máy chủ" class="input-dark text-sm">
+                                <input type="text" id="imgCaptionInput" placeholder="VD: Hình 1 - Giao diện màn hình chính của trò chơi" class="input-dark text-sm">
                             </div>
                             <button type="button" onclick="addImageByUrlOrPending()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg transition shrink-0 flex items-center gap-2 shadow-lg shadow-emerald-600/20">
                                 <i class="fa-solid fa-plus"></i> Gán Ảnh Vào Hồ Sơ
@@ -344,13 +347,23 @@
             </div>
         </div>
 
-        <!-- VIEW 3: QUY TRÌNH & HƯỚNG DẪN NỘP (GUIDE) -->
+        <!-- VIEW 3: QUY TRÌNH & HƯỚNG DẪN NỘP CHÍNH PHỦ (GUIDE) -->
         <div id="mainViewGuide" class="hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
-                <h2 id="guideTitle" class="text-lg font-bold text-emerald-400 mb-2">Quy trình pháp lý & Hướng dẫn nộp hồ sơ phát hành Game G1</h2>
-                <p class="text-sm text-slate-300 mb-6" id="guideSubtitle">Chi tiết các bước chuẩn bị hồ sơ, cơ quan tiếp nhận và thủ tục nộp theo quy định pháp luật.</p>
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                    <div>
+                        <h2 id="guideTitle" class="text-lg font-bold text-emerald-400 mb-1">Quy trình pháp lý & Hướng dẫn nộp hồ sơ phát hành Game G1</h2>
+                        <p class="text-sm text-slate-300" id="guideSubtitle">Chi tiết các bước chuẩn bị hồ sơ, cơ quan tiếp nhận và thủ tục nộp theo quy định pháp luật.</p>
+                    </div>
+                    <!-- Nút truy cập cổng chính phủ động -->
+                    <div id="govPortalButtonContainer">
+                        <a href="https://dichvucong.mic.gov.vn" target="_blank" id="govLinkBtn" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                            <i class="fa-solid fa-building-columns"></i> Truy Cập Cổng Dịch Vụ Công Bộ TTTT <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                        </a>
+                    </div>
+                </div>
 
-                <div id="guideContentArea" class="space-y-6 text-sm text-slate-200">
+                <div id="guideContentArea" class="space-y-6 text-sm text-slate-200 pt-4 border-t border-slate-800">
                     <!-- Dynamic Guide Content injected via JS -->
                 </div>
             </div>
@@ -360,7 +373,7 @@
 
     <!-- Clean Footer -->
     <footer class="border-t border-slate-800/80 py-5 text-center text-xs text-slate-500 mt-12">
-        GameLicense Pro VN © 2026 - Hỗ trợ lập hồ sơ, tờ trình thủ tục phát hành game G1, G2, G3, G4 chuyên nghiệp.
+        GameLicense Pro VN © 2026 - Hỗ trợ lập hồ sơ phát hành, SHTT bản quyền game G1, G2, G3, G4 chuyên nghiệp.
     </footer>
 
     <script>
@@ -369,41 +382,57 @@
         let attachedImages = [];
         let pendingUploadedFiles = [];
 
-        // Cấu hình dữ liệu text cho từng loại game khi chuyển tab
+        // Cấu hình dữ liệu text cho từng loại game & SHTT khi chuyển tab
         const gameConfigs = {
             G1: {
                 title: "Hồ sơ đề nghị cấp Giấy phép phát hành Trò chơi điện tử G1 trên mạng",
                 groupText: "G1 - Trò chơi có sự tương tác giữa nhiều người chơi thông qua hệ thống máy chủ",
+                docName: "HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG (G1)",
+                numberPrefix: "01/ĐA-G1",
+                govName: "Cổng Dịch Vụ Công Bộ Thông Tin và Truyền Thông",
+                govUrl: "https://dichvucong.mic.gov.vn",
+                sec3Title: "Phần III: Đề Án Kỹ Thuật & Hạ Tầng Máy Chủ",
+                sec4Title: "Phần IV: Phương Án Thanh Toán & Nhân Sự Vận Hành",
+                labels: {
+                    story: "Cốt truyện & Bối cảnh trò chơi *",
+                    play: "Mô tả chi tiết Gameplay & Tính năng tương tác *",
+                    control: "Phương án kiểm soát nội dung, chống bạo lực & tuân thủ độ tuổi *",
+                    sec3_1: "Thông tin hệ thống máy chủ & Nhà cung cấp hạ tầng (ISP/Datacenter) *",
+                    sec3_2: "Phương án đảm bảo an toàn thông tin, an ninh mạng & Sao lưu dự phòng *",
+                    sec4_1: "Phương án thu phí, vật phẩm ảo & Quản lý đơn vị quy đổi *",
+                    sec4_2: "Nhân sự quản trị & Quy trình giải quyết khiếu nại khách hàng *"
+                },
                 guideHtml: `
                     <div class="space-y-5">
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
                             <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Căn cứ pháp lý & Điều kiện cấp phép G1</h3>
                             <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
-                                <li>Nghị định 147/2024/NĐ-CP về quản lý, cung cấp, sử dụng dịch vụ internet và thông tin trên mạng (thay thế Nghị định 72/2013/NĐ-CP).</li>
+                                <li>Nghị định 147/2024/NĐ-CP về quản lý, cung cấp, sử dụng dịch vụ internet và thông tin trên mạng.</li>
                                 <li>Doanh nghiệp phải có Giấy chứng nhận đăng ký kinh doanh có ngành nghề cung cấp dịch vụ trò chơi điện tử trên mạng.</li>
                                 <li>Phải có Giấy phép cung cấp dịch vụ trò chơi điện tử G1 trước khi đề nghị cấp quyết định phê duyệt nội dung, kịch bản trò chơi.</li>
                             </ul>
                         </div>
 
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ đầy đủ nộp cơ quan chức năng</h3>
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ nộp cơ quan chức năng</h3>
                             <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
-                                <li>Đơn đề nghị cấp Giấy phép phát hành trò chơi G1 (theo mẫu).</li>
-                                <li>Giấy chứng nhận đăng ký doanh nghiệp (bản sao có chứng thực).</li>
-                                <li>Đề án phát hành trò chơi (bao gồm thông tin doanh nghiệp, kịch bản, nhân vật, cốt truyện, biện pháp bảo vệ người chơi).</li>
-                                <li>Đề án kỹ thuật (thông tin thiết bị máy chủ tại Việt Nam, phương án bảo mật, sao lưu dữ liệu).</li>
-                                <li>Phương án tài chính, thanh toán, quản lý vật phẩm ảo và chăm sóc khách hàng.</li>
-                                <li>Văn bản xác nhận quyền sở hữu hoặc quyền hợp pháp khai thác/phân phối trò chơi tại Việt Nam (Hợp đồng chuyển nhượng/ủy quyền tiếng Việt hợp pháp hóa lãnh sự nếu mua từ nước ngoài).</li>
+                                <li>Đơn đề nghị cấp Giấy phép phát hành trò chơi G1 (xuất từ file Word của hệ thống).</li>
+                                <li>Giấy chứng nhận đăng ký doanh nghiệp & Giấy phép cung cấp dịch vụ G1.</li>
+                                <li>Đề án phát hành trò chơi (bao gồm kịch bản, cốt truyện, biện pháp bảo vệ người chơi).</li>
+                                <li>Đề án kỹ thuật (thông tin thiết bị máy chủ tại Việt Nam, phương án bảo mật, sao lưu).</li>
+                                <li>Phương án tài chính, thanh toán qua trung gian được cấp phép và chăm sóc khách hàng.</li>
+                                <li>Hợp đồng chuyển nhượng/ủy quyền khai thác game (nếu mua từ nước ngoài, có hợp pháp hóa lãnh sự).</li>
                             </ol>
                         </div>
 
-                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp hồ sơ & Trình tự thực hiện</h3>
-                            <ul class="space-y-2 text-slate-300 text-xs">
-                                <li><b>Cơ quan tiếp nhận:</b> Bộ Thông tin và Truyền thông (Cục Phát thanh, Truyền hình và Thông tin điện tử - PTTH&TTĐT).</li>
-                                <li><b>Hình thức nộp:</b> Nộp trực tuyến qua Cổng dịch vụ công trực tuyến của Bộ TTTT hoặc nộp trực tiếp/qua đường bưu điện.</li>
-                                <li><b>Thời hạn giải quyết:</b> Trong thời hạn 30 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ, cơ quan có thẩm quyền sẽ xem xét và cấp phép.</li>
-                            </ul>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-white mb-1 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp hồ sơ trực tuyến chính thức</h3>
+                                <p class="text-xs text-slate-300">Nộp hồ sơ trực tuyến qua Cổng dịch vụ công của Bộ Thông tin và Truyền thông.</p>
+                            </div>
+                            <a href="https://dichvucong.mic.gov.vn" target="_blank" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition shrink-0 flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở Cổng Dịch Vụ Công Bộ TTTT
+                            </a>
                         </div>
                     </div>
                 `
@@ -411,29 +440,43 @@
             G2: {
                 title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G2 (Tương tác với máy chủ)",
                 groupText: "G2 - Trò chơi chỉ có sự tương tác giữa người chơi với hệ thống máy chủ",
+                docName: "HỒ SƠ ĐĂNG KÝ CUNG CẤP TRÒ CHƠI ĐIỆN TỬ G2",
+                numberPrefix: "01/ĐK-G2",
+                govName: "Cổng Dịch Vụ Công Bộ TTTT hoặc Sở TTTT Địa Phương",
+                govUrl: "https://dichvucong.mic.gov.vn",
+                sec3Title: "Phần III: Đề Án Kỹ Thuật & Hạ Tầng Máy Chủ",
+                sec4Title: "Phần IV: Phương Án Thanh Toán & Nhân Sự Vận Hành",
+                labels: {
+                    story: "Mô tả chi tiết kịch bản & nội dung trò chơi *",
+                    play: "Mô tả tương tác giữa người chơi và máy chủ *",
+                    control: "Phương án kiểm soát nội dung & độ tuổi người chơi *",
+                    sec3_1: "Thông tin hệ thống thiết bị máy chủ tại Việt Nam *",
+                    sec3_2: "Phương án an toàn thông tin & sao lưu dữ liệu *",
+                    sec4_1: "Phương án quản lý tài chính & thu phí trò chơi *",
+                    sec4_2: "Nhân sự quản trị hệ thống và hỗ trợ người chơi *"
+                },
                 guideHtml: `
                     <div class="space-y-5">
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định pháp lý đối với Game G2</h3>
-                            <p class="text-xs text-slate-300">Trò chơi G2 là trò chơi điện tử có sự tương tác giữa người chơi với hệ thống máy chủ của doanh nghiệp cung cấp dịch vụ nhưng không có sự tương tác giữa các người chơi với nhau. Doanh nghiệp cần thực hiện thủ tục thông báo/đăng ký cung cấp theo quy định hiện hành.</p>
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định pháp lý Game G2</h3>
+                            <p class="text-xs text-slate-300">Trò chơi G2 là trò chơi điện tử có tương tác giữa người chơi với máy chủ nhưng không có tương tác giữa các người chơi với nhau.</p>
                         </div>
-
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ chuẩn bị</h3>
-                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
-                                <li>Văn bản thông báo/đăng ký cung cấp trò chơi điện tử G2.</li>
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-300 text-xs">
+                                <li>Văn bản đăng ký cung cấp trò chơi G2.</li>
                                 <li>Bản sao Giấy chứng nhận đăng ký doanh nghiệp.</li>
-                                <li>Mô tả chi tiết kịch bản, nội dung, giao diện và cách thức chơi trò chơi.</li>
-                                <li>Phương án kỹ thuật, địa điểm đặt máy chủ tại Việt Nam đảm bảo lưu trữ dữ liệu.</li>
+                                <li>Mô tả kịch bản, nội dung trò chơi và phương án kỹ thuật máy chủ.</li>
                             </ol>
                         </div>
-
-                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp & Thời hạn</h3>
-                            <ul class="space-y-2 text-slate-300 text-xs">
-                                <li><b>Cơ quan tiếp nhận:</b> Sở Thông tin và Truyền thông tại địa phương nơi doanh nghiệp đặt trụ sở chính (hoặc Cục PTTH&TTĐT tùy theo phân cấp).</li>
-                                <li><b>Thời hạn xử lý:</b> Thường từ 15 đến 20 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ.</li>
-                            </ul>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-white mb-1"><i class="fa-solid fa-paper-plane text-emerald-400"></i> Nơi nộp hồ sơ</h3>
+                                <p class="text-xs text-slate-300">Nộp tại Sở TTTT tỉnh/thành phố hoặc Cổng dịch vụ công Bộ TTTT.</p>
+                            </div>
+                            <a href="https://dichvucong.mic.gov.vn" target="_blank" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition shrink-0 flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Truy Cập Cổng Dịch Vụ Công
+                            </a>
                         </div>
                     </div>
                 `
@@ -441,25 +484,43 @@
             G3: {
                 title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G3 (Nhiều người chơi nội bộ)",
                 groupText: "G3 - Trò chơi có sự tương tác giữa nhiều người chơi nhưng không có tương tác với máy chủ",
+                docName: "HỒ SƠ ĐĂNG KÝ CUNG CẤP TRÒ CHƠI ĐIỆN TỬ G3",
+                numberPrefix: "01/ĐK-G3",
+                govName: "Cổng Dịch Vụ Công Bộ TTTT hoặc Sở TTTT",
+                govUrl: "https://dichvucong.mic.gov.vn",
+                sec3Title: "Phần III: Đề Án Kỹ Thuật Kết Nối Mạng",
+                sec4Title: "Phần IV: Phương Án Vận Hành & Hỗ Trợ",
+                labels: {
+                    story: "Mô tả nội dung & thể loại trò chơi *",
+                    play: "Mô tả phương thức kết nối mạng giữa nhiều người chơi (P2P/Nội bộ) *",
+                    control: "Biện pháp quản lý người chơi và chống vi phạm *",
+                    sec3_1: "Mô tả hạ tầng mạng và phương thức truyền thông tin *",
+                    sec3_2: "Phương án bảo mật thông tin liên lạc người chơi *",
+                    sec4_1: "Phương án tài chính và quản lý dịch vụ *",
+                    sec4_2: "Thông tin bộ phận kỹ thuật vận hành *"
+                },
                 guideHtml: `
                     <div class="space-y-5">
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Đặc điểm pháp lý Game G3</h3>
-                            <p class="text-xs text-slate-300">Trò chơi G3 bao gồm các tựa game cho phép nhiều người chơi tương tác trực tiếp với nhau (qua mạng ngang hàng P2P hoặc kết nối cục bộ) nhưng không thông qua hệ thống máy chủ quản lý trò chơi trung tâm.</p>
+                            <h3 class="font-bold text-white mb-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định Game G3</h3>
+                            <p class="text-xs text-slate-300">Trò chơi G3 có tương tác giữa nhiều người chơi nhưng không thông qua hệ thống máy chủ trung tâm.</p>
                         </div>
-
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
-                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
-                                <li>Văn bản đăng ký cung cấp trò chơi G3.</li>
-                                <li>Giấy chứng nhận đăng ký doanh nghiệp có chức năng phát hành game.</li>
-                                <li>Bản mô tả chi tiết phương thức kết nối mạng giữa những người chơi và nội dung kịch bản game.</li>
+                            <h3 class="font-bold text-white mb-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-300 text-xs">
+                                <li>Đơn đăng ký cung cấp trò chơi G3.</li>
+                                <li>Giấy phép kinh doanh có ngành nghề phù hợp.</li>
+                                <li>Mô tả chi tiết cách thức kết nối mạng và nội dung game.</li>
                             </ol>
                         </div>
-
-                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Hướng dẫn nộp hồ sơ</h3>
-                            <p class="text-xs text-slate-300">Nộp trực tiếp hoặc qua cổng thông tin điện tử của Sở Thông tin và Truyền thông tỉnh/thành phố nơi doanh nghiệp hoạt động.</p>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-white mb-1">Nơi nộp trực tuyến</h3>
+                                <p class="text-xs text-slate-300">Nộp qua Cổng dịch vụ công trực tuyến.</p>
+                            </div>
+                            <a href="https://dichvucong.mic.gov.vn" target="_blank" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition shrink-0 flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở Cổng Dịch Vụ Công
+                            </a>
                         </div>
                     </div>
                 `
@@ -467,25 +528,95 @@
             G4: {
                 title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G4 (Offline / Tải về máy)",
                 groupText: "G4 - Trò chơi tải về máy, không có sự tương tác giữa người chơi và với máy chủ",
+                docName: "HỒ SƠ ĐĂNG KÝ CUNG CẤP TRÒ CHƠI ĐIỆN TỬ G4",
+                numberPrefix: "01/ĐK-G4",
+                govName: "Cổng Dịch Vụ Công Bộ TTTT / Sở TTTT",
+                govUrl: "https://dichvucong.mic.gov.vn",
+                sec3Title: "Phần III: Phương Án Kỹ Thuật Phần Mềm",
+                sec4Title: "Phần IV: Phương Án Phát Hành & Hỗ Trợ",
+                labels: {
+                    story: "Cốt truyện & Mô tả nội dung trò chơi Offline *",
+                    play: "Mô tả tính năng và cơ chế hoạt động độc lập (Offline) *",
+                    control: "Độ tuổi khuyến cáo và kiểm soát nội dung thuần phong mỹ tục *",
+                    sec3_1: "Thông tin định dạng phần mềm, nền tảng thiết bị tương thích *",
+                    sec3_2: "Cam kết an toàn mã nguồn không chứa mã độc *",
+                    sec4_1: "Phương thức phân phối (App Store, Google Play, Steam...) *",
+                    sec4_2: "Thông tin liên hệ bảo hành và hỗ trợ người dùng *"
+                },
                 guideHtml: `
                     <div class="space-y-5">
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định đối với Game G4 (Offline)</h3>
-                            <p class="text-xs text-slate-300">Trò chơi G4 là trò chơi tải về thiết bị di động hoặc máy tính (Offline), không có kết nối tương tác trực tuyến với máy chủ trong quá trình chơi. Doanh nghiệp cần đảm bảo nội dung game tuân thủ thuần phong mỹ tục và không vi phạm các điều cấm.</p>
+                            <h3 class="font-bold text-white mb-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định Game G4</h3>
+                            <p class="text-xs text-slate-300">Trò chơi tải về thiết bị di động hoặc máy tính, không kết nối tương tác trực tuyến với máy chủ.</p>
+                        </div>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-300 text-xs">
+                                <li>Văn bản đăng ký phát hành trò chơi G4.</li>
+                                <li>Bản sao Giấy phép kinh doanh.</li>
+                                <li>Bản tóm tắt nội dung và hình ảnh trò chơi.</li>
+                            </ol>
+                        </div>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-white mb-1">Nơi nộp hồ sơ</h3>
+                                <p class="text-xs text-slate-300">Sở Thông tin và Truyền thông địa phương hoặc Cổng dịch vụ công.</p>
+                            </div>
+                            <a href="https://dichvucong.mic.gov.vn" target="_blank" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-xs transition shrink-0 flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở Cổng Dịch Vụ Công
+                            </a>
+                        </div>
+                    </div>
+                `
+            },
+            SHTT: {
+                title: "Hồ sơ đăng ký Bản quyền Sở hữu trí tuệ (Copyright) Game & Phần mềm",
+                groupText: "Bảo hộ Quyền tác giả đối với Chương trình máy tính, Sưu tập dữ liệu & Đồ họa Game",
+                docName: "TỜ KHAI ĐĂNG KÝ QUYỀN TÁC GIẢ / QUYỀN LIÊN QUAN",
+                numberPrefix: "01/TK-SHTT",
+                govName: "Cục Bản quyền Tác giả (Bộ Văn hóa, Thể thao và Du lịch)",
+                govUrl: "https://dichvucong.bvhttdl.gov.vn",
+                sec3Title: "Phần III: Bản Mô Tả Tóm Tắt Tác Phẩm & Mã Nguồn / Đồ Họa",
+                sec4Title: "Phần IV: Cam Kết Của Tác Giả & Chủ Sở Hữu Quyền",
+                labels: {
+                    story: "Tóm tắt nội dung sáng tạo, ý tưởng cốt lõi của phần mềm/game *",
+                    play: "Mô tả chi tiết cấu trúc phần mềm, thuật toán, ngôn ngữ lập trình (C#, Unity...) *",
+                    control: "Cam kết quyền sở hữu sáng tạo độc quyền, không sao chép trái phép *",
+                    sec3_1: "Danh mục tài liệu đính kèm (Mã nguồn Source Code in trên giấy A4, Đĩa CD/USB lưu file phần mềm) *",
+                    sec3_2: "Thông tin về quyền sở hữu (Tác giả sáng tạo đồng thời là chủ sở hữu hoặc theo hợp đồng giao việc) *",
+                    sec4_1: "Kế hoạch khai thác thương mại, phân phối và bảo vệ bản quyền tác phẩm *",
+                    sec4_2: "Cam kết chịu trách nhiệm trước pháp luật về tính trung thực của hồ sơ đăng ký *"
+                },
+                guideHtml: `
+                    <div class="space-y-5">
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-amber-300 mb-2 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> 1. Căn cứ pháp lý & Ý nghĩa bảo hộ SHTT Game</h3>
+                            <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                <li>Luật Sở hữu trí tuệ số 50/2005/QH11 (đã được sửa đổi, bổ sung năm 2009, 2019, 2022).</li>
+                                <li><b>Đối tượng bảo hộ trong Game:</b> Mã nguồn phần mềm (Source Code), Sưu tập dữ liệu, Thiết kế nhân vật, Đồ họa 2D/3D, Âm nhạc và Kịch bản trò chơi.</li>
+                                <li>Giấy chứng nhận đăng ký quyền tác giả là chứng cứ pháp lý quan trọng nhất khi xảy ra tranh chấp bản quyền hoặc khi cần xử lý các hành vi sao chép lậu game.</li>
+                            </ul>
                         </div>
 
                         <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <h3 class="font-bold text-amber-300 mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open"></i> 2. Thành phần hồ sơ đăng ký Bản quyền Game</h3>
                             <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
-                                <li>Đơn/Văn bản đăng ký phát hành trò chơi G4.</li>
-                                <li>Bản sao Giấy phép kinh doanh của doanh nghiệp.</li>
-                                <li>Bản mô tả tóm tắt nội dung, cốt truyện, hình ảnh và độ tuổi khuyến cáo.</li>
+                                <li><b>Tờ khai đăng ký quyền tác giả</b> (Xuất từ hệ thống GameLicense Pro VN này, có ký tên/đóng dấu).</li>
+                                <li><b>02 Bản sao tác phẩm</b> cần đăng ký (Ví dụ: In trích đoạn mã nguồn source code khoảng 30-50 trang A4 đối với phần mềm game; hoặc đĩa CD/USB chứa file game/đồ họa).</li>
+                                <li>Bản sao Giấy chứng nhận đăng ký kinh doanh (nếu chủ sở hữu là công ty) hoặc CCCD (nếu là cá nhân tác giả).</li>
+                                <li>Hợp đồng giao việc hoặc Hợp đồng sáng tạo (nếu tác giả và chủ đầu tư là khác nhau).</li>
+                                <li>Giấy ủy quyền (nếu ủy quyền cho người nộp thay).</li>
                             </ol>
                         </div>
 
-                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
-                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp hồ sơ</h3>
-                            <p class="text-xs text-slate-300">Nộp tại Sở Thông tin và Truyền thông địa phương hoặc cơ quan quản lý chuyên ngành.</p>
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 class="font-bold text-amber-300 mb-1 flex items-center gap-2"><i class="fa-solid fa-building-columns"></i> 3. Cơ quan tiếp nhận & Nộp hồ sơ trực tuyến</h3>
+                                <p class="text-xs text-slate-300">Nộp trực tiếp tại Cục Bản quyền Tác giả hoặc qua Cổng dịch vụ công trực tuyến của Bộ Văn hóa, Thể thao và Du lịch.</p>
+                            </div>
+                            <a href="https://dichvucong.bvhttdl.gov.vn" target="_blank" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl text-xs transition shrink-0 flex items-center gap-2 shadow-lg shadow-amber-600/30">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở Cổng Dịch Vụ Công Bản Quyền
+                            </a>
                         </div>
                     </div>
                 `
@@ -496,22 +627,57 @@
             currentGameTab = gameType;
 
             // Highlight active tab button
-            ['G1', 'G2', 'G3', 'G4'].forEach(g => {
+            ['G1', 'G2', 'G3', 'G4', 'SHTT'].forEach(g => {
                 const btn = document.getElementById('tabBtn' + g);
                 if (g === gameType) {
-                    btn.className = "px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow";
+                    if (g === 'SHTT') {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-amber-600 text-white flex items-center gap-2 shrink-0 shadow border border-amber-400";
+                    } else {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow";
+                    }
                 } else {
-                    btn.className = "px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0";
+                    if (g === 'SHTT') {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-amber-300 hover:bg-slate-700 flex items-center gap-2 shrink-0 border border-amber-500/40";
+                    } else {
+                        btn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0";
+                    }
                 }
             });
 
-            // Update titles and hidden inputs
+            // Update titles, labels and guidelines
             const config = gameConfigs[gameType];
             document.getElementById('currentTabTitle').textContent = config.title;
             document.getElementById('gameGroupInput').value = config.groupText;
-            document.getElementById('guideTitle').textContent = "Quy trình pháp lý & Hướng dẫn nộp hồ sơ phát hành " + gameType;
+            document.getElementById('sec3Title').textContent = config.sec3Title;
+            document.getElementById('sec4Title').textContent = config.sec4Title;
+
+            document.getElementById('labelStory').textContent = config.labels.story;
+            document.getElementById('labelPlay').textContent = config.labels.play;
+            document.getElementById('labelControl').textContent = config.labels.control;
+            document.getElementById('labelSec3_1').textContent = config.labels.sec3_1;
+            document.getElementById('labelSec3_2').textContent = config.labels.sec3_2;
+            document.getElementById('labelSec4_1').textContent = config.labels.sec4_1;
+            document.getElementById('labelSec4_2').textContent = config.labels.sec4_2;
+
+            document.getElementById('guideTitle').textContent = "Quy trình pháp lý & Hướng dẫn nộp hồ sơ " + (gameType === 'SHTT' ? "Bản Quyền SHTT" : "phát hành " + gameType);
             document.getElementById('guideSubtitle').textContent = config.title;
             document.getElementById('guideContentArea').innerHTML = config.guideHtml;
+
+            // Cập nhật nút truy cập cổng chính phủ động
+            const govContainer = document.getElementById('govPortalButtonContainer');
+            if (gameType === 'SHTT') {
+                govContainer.innerHTML = `
+                    <a href="https://dichvucong.bvhttdl.gov.vn" target="_blank" class="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-amber-600/30 flex items-center gap-2">
+                        <i class="fa-solid fa-building-columns"></i> Cổng DV Công Cục Bản Quyền Tác Giả <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                    </a>
+                `;
+            } else {
+                govContainer.innerHTML = `
+                    <a href="https://dichvucong.mic.gov.vn" target="_blank" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                        <i class="fa-solid fa-building-columns"></i> Cổng Dịch Vụ Công Bộ TTTT <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                    </a>
+                `;
+            }
         }
 
         function switchView(viewName) {
@@ -524,7 +690,6 @@
             const btnPrev = document.getElementById('navBtnPrev');
             const btnGuide = document.getElementById('navBtnGuide');
 
-            // Reset all buttons
             [btnGen, btnPrev, btnGuide].forEach(b => {
                 b.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2";
             });
@@ -786,25 +951,25 @@
         function getFormData() {
             const config = gameConfigs[currentGameTab];
             return {
-                companyName: document.getElementById('companyName').value.trim() || "[TÊN DOANH NGHIỆP]",
-                taxCode: document.getElementById('taxCode').value.trim() || "[MÃ SỐ DOANH NGHIỆP]",
-                legalRep: document.getElementById('legalRep').value.trim() || "[NGƯỜI ĐẠI DIỆN]",
+                companyName: document.getElementById('companyName').value.trim() || "[TÊN DOANH NGHIỆP / TÁC GIẢ]",
+                taxCode: document.getElementById('taxCode').value.trim() || "[MST / CCCD]",
+                legalRep: document.getElementById('legalRep').value.trim() || "[NGƯỜI ĐẠI DIỆN / TÁC GIẢ]",
                 repTitle: document.getElementById('repTitle').value.trim() || "[CHỨC VỤ]",
                 companyAddress: document.getElementById('companyAddress').value.trim() || "[ĐỊA CHỈ TRỤ SỞ]",
                 licenseNumber: document.getElementById('licenseNumber').value.trim() || "Đang thực hiện thủ tục cấp mới",
                 contactInfo: document.getElementById('contactInfo').value.trim() || "[THÔNG TIN LIÊN HỆ]",
-                gameName: document.getElementById('gameName').value.trim() || "[TÊN TRÒ CHƠI]",
+                gameName: document.getElementById('gameName').value.trim() || "[TÊN TRÒ CHƠI / TÁC PHẨM]",
                 gameGroup: config.groupText,
                 ageRating: document.getElementById('ageRating').value,
-                gamePlatforms: document.getElementById('gamePlatforms').value.trim() || "[NỀN TẢNG PHÁT HÀNH]",
+                gamePlatforms: document.getElementById('gamePlatforms').value.trim() || "[NỀN TẢNG / ĐỊNH DẠNG]",
                 copyrightInfo: document.getElementById('copyrightInfo').value.trim() || "[NGUỒN GỐC BẢN QUYỀN]",
-                gameStory: document.getElementById('gameStory').value.trim() || "(Chưa nhập cốt truyện trò chơi)",
-                gamePlay: document.getElementById('gamePlay').value.trim() || "(Chưa nhập mô tả gameplay)",
-                contentControl: document.getElementById('contentControl').value.trim() || "(Chưa nhập phương án kiểm soát nội dung)",
-                serverInfo: document.getElementById('serverInfo').value.trim() || "(Chưa nhập thông tin hệ thống máy chủ)",
+                gameStory: document.getElementById('gameStory').value.trim() || "(Chưa nhập thông tin nội dung)",
+                gamePlay: document.getElementById('gamePlay').value.trim() || "(Chưa nhập thông tin chi tiết kỹ thuật)",
+                contentControl: document.getElementById('contentControl').value.trim() || "(Chưa nhập phương án kiểm soát & bảo vệ)",
+                serverInfo: document.getElementById('serverInfo').value.trim() || "(Chưa nhập thông tin hạ tầng / tài liệu đính kèm)",
                 securityPlan: document.getElementById('securityPlan').value.trim() || "(Chưa nhập phương án an toàn thông tin)",
-                paymentPlan: document.getElementById('paymentPlan').value.trim() || "(Chưa nhập phương án thu phí)",
-                supportPlan: document.getElementById('supportPlan').value.trim() || "(Chưa nhập phương án chăm sóc khách hàng)"
+                paymentPlan: document.getElementById('paymentPlan').value.trim() || "(Chưa nhập phương án thương mại hóa)",
+                supportPlan: document.getElementById('supportPlan').value.trim() || "(Chưa nhập thông tin nhân sự / cam kết)"
             };
         }
 
@@ -816,6 +981,7 @@
 
         function renderDocumentPreview() {
             const d = getFormData();
+            const config = gameConfigs[currentGameTab];
             const container = document.getElementById('a4PreviewContainer');
 
             const imagesHtml = attachedImages.length > 0
@@ -832,7 +998,7 @@
                 <div style="display: flex; justify-content: space-between; margin-bottom: 24px; text-align: center;">
                     <div style="width: 45%;">
                         <p style="font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 0;">${d.companyName}</p>
-                        <p style="font-size: 11pt; margin: 4px 0 0 0;">Số: 01/ĐA-${currentGameTab}</p>
+                        <p style="font-size: 11pt; margin: 4px 0 0 0;">Số: ${config.numberPrefix}</p>
                         <hr style="width: 35%; border-top: 1px solid #000; margin: 6px auto;" />
                     </div>
                     <div style="width: 53%;">
@@ -844,50 +1010,50 @@
                 </div>
 
                 <div style="text-align: center; margin: 28px 0 24px 0;">
-                    <h2 style="font-size: 14pt; font-weight: bold; margin: 0;">HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG (${currentGameTab})</h2>
-                    <p style="font-size: 12.5pt; font-weight: bold; margin-top: 6px;">Tên trò chơi: ${d.gameName}</p>
+                    <h2 style="font-size: 14pt; font-weight: bold; margin: 0;">${config.docName}</h2>
+                    <p style="font-size: 12.5pt; font-weight: bold; margin-top: 6px;">Tên tác phẩm / Trò chơi: ${d.gameName}</p>
                     <p style="font-size: 11pt; font-style: italic;">(${d.gameGroup})</p>
                 </div>
 
-                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">I. THÔNG TIN DOANH NGHIỆP ĐỀ NGHỊ CẤP PHÉP</h3>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Tên doanh nghiệp:</b> ${d.companyName}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Mã số doanh nghiệp:</b> ${d.taxCode}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>3. Người đại diện theo pháp luật:</b> ${d.legalRep} - <b>Chức vụ:</b> ${d.repTitle}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>4. Địa chỉ trụ sở chính:</b> ${d.companyAddress}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>5. Giấy phép cung cấp dịch vụ trò chơi điện tử:</b> ${d.licenseNumber}</p>
+                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">I. THÔNG TIN CHỦ THỂ QUYỀN / DOANH NGHIỆP</h3>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Tên chủ sở hữu / Doanh nghiệp:</b> ${d.companyName}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Mã số doanh nghiệp / CCCD:</b> ${d.taxCode}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>3. Người đại diện / Tác giả:</b> ${d.legalRep} - <b>Chức vụ:</b> ${d.repTitle}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>4. Địa chỉ liên hệ:</b> ${d.companyAddress}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>5. Số Giấy phép / Số đăng ký liên quan:</b> ${d.licenseNumber}</p>
                 <p style="margin-bottom: 12px; text-indent: 0.8cm;"><b>6. Thông tin liên hệ:</b> ${d.contactInfo}</p>
 
-                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">II. THÔNG TIN TỔNG QUAN & KỊCH BẢN CHI TIẾT TRÒ CHƠI</h3>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Tên trò chơi:</b> ${d.gameName}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Phân loại trò chơi:</b> ${d.gameGroup}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>3. Phân loại theo độ tuổi:</b> ${d.ageRating}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>4. Nền tảng cung cấp:</b> ${d.gamePlatforms}</p>
+                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">II. THÔNG TIN CHI TIẾT TÁC PHẨM / TRÒ CHƠI</h3>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Tên tác phẩm / Trò chơi:</b> ${d.gameName}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Phân nhóm / Loại hình:</b> ${d.gameGroup}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>3. Phân loại độ tuổi / Hình thức:</b> ${d.ageRating}</p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>4. Nền tảng phát hành / Công bố:</b> ${d.gamePlatforms}</p>
                 <p style="margin-bottom: 8px; text-indent: 0.8cm;"><b>5. Nguồn gốc & Bản quyền:</b> ${d.copyrightInfo}</p>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>6. Cốt truyện và bối cảnh trò chơi:</b></p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>6. Mô tả nội dung / Cốt truyện sáng tạo:</b></p>
                 ${formatMultilineHtml(d.gameStory)}
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>7. Hệ thống nhân vật, nhiệm vụ và tính năng tương tác:</b></p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>7. Chi tiết cấu trúc kỹ thuật / Gameplay:</b></p>
                 ${formatMultilineHtml(d.gamePlay)}
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>8. Biện pháp kiểm soát nội dung và bảo vệ người chơi:</b></p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>8. Phương án bảo vệ bản quyền & kiểm soát nội dung:</b></p>
                 ${formatMultilineHtml(d.contentControl)}
 
-                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">III. ĐỀ ÁN KỸ THUẬT, HẠ TẦNG MÁY CHỦ & AN TOÀN THÔNG TIN</h3>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Hệ thống thiết bị máy chủ và đường truyền kết nối:</b></p>
+                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">III. ${currentGameTab === 'SHTT' ? 'TÀI LIỆU ĐÍNH KÈM & THÔNG TIN QUYỀN SỞ HỮU' : 'ĐỀ ÁN KỸ THUẬT & HẠ TẦNG MÁY CHỦ'}</h3>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Chi tiết hạ tầng / Danh mục tài liệu:</b></p>
                 ${formatMultilineHtml(d.serverInfo)}
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Phương án đảm bảo an toàn, an ninh thông tin & lưu trữ dữ liệu:</b></p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Phương án bảo mật & an toàn thông tin:</b></p>
                 ${formatMultilineHtml(d.securityPlan)}
 
-                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">IV. PHƯƠNG ÁN THU PHÍ, QUẢN LÝ VẬT PHẨM ẢO & CHĂM SÓC KHÁCH HÀNG</h3>
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Phương án thu phí và quản lý đơn vị ảo trong trò chơi:</b></p>
+                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">IV. ${currentGameTab === 'SHTT' ? 'CAM KẾT CỦA TÁC GIẢ & CHỦ SỞ HỮU' : 'PHƯƠNG ÁN THU PHÍ & VẬN HÀNH'}</h3>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>1. Phương án thương mại hóa / Khai thác:</b></p>
                 ${formatMultilineHtml(d.paymentPlan)}
-                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Phương án nhân sự vận hành và giải quyết khiếu nại:</b></p>
+                <p style="margin-bottom: 4px; text-indent: 0.8cm;"><b>2. Cam kết pháp lý & Nhân sự chịu trách nhiệm:</b></p>
                 ${formatMultilineHtml(d.supportPlan)}
 
-                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">V. PHỤ LỤC HÌNH ẢNH GIAO DIỆN & SƠ ĐỒ HỆ THỐNG</h3>
+                <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px; margin-bottom: 8px;">V. PHỤ LỤC HÌNH ẢNH MINH HỌA & SƠ ĐỒ ĐÍNH KÈM</h3>
                 ${imagesHtml}
 
                 <div style="display: flex; justify-content: flex-end; margin-top: 40px; page-break-inside: avoid;">
                     <div style="text-align: center; width: 48%;">
-                        <p style="font-weight: bold; font-size: 11.5pt; margin: 0;">ĐẠI DIỆN THEO PHÁP LUẬT CỦA DOANH NGHIỆP</p>
+                        <p style="font-weight: bold; font-size: 11.5pt; margin: 0;">ĐẠI DIỆN THEO PHÁP LUẬT / TÁC GIẢ</p>
                         <p style="font-style: italic; font-size: 10.5pt; margin: 2px 0 70px 0;">(Ký, ghi rõ họ tên và đóng dấu)</p>
                         <p style="font-weight: bold; font-size: 12pt;">${d.legalRep}</p>
                     </div>
@@ -909,6 +1075,7 @@
         async function exportToWord() {
             const { Document, Packer, Paragraph, TextRun, AlignmentType, ImageRun } = window.docx;
             const d = getFormData();
+            const config = gameConfigs[currentGameTab];
 
             const children = [];
 
@@ -930,14 +1097,14 @@
                     alignment: AlignmentType.CENTER,
                     spacing: { before: 200, after: 120 },
                     children: [
-                        new TextRun({ text: `HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG (${currentGameTab})`, bold: true, size: 28, font: "Times New Roman" })
+                        new TextRun({ text: config.docName, bold: true, size: 28, font: "Times New Roman" })
                     ]
                 }),
                 new Paragraph({
                     alignment: AlignmentType.CENTER,
                     spacing: { after: 300 },
                     children: [
-                        new TextRun({ text: `Tên trò chơi: ${d.gameName} (${d.gameGroup})`, bold: true, size: 26, font: "Times New Roman" })
+                        new TextRun({ text: `Tên tác phẩm / Trò chơi: ${d.gameName} (${d.gameGroup})`, bold: true, size: 26, font: "Times New Roman" })
                     ]
                 })
             );
@@ -984,37 +1151,37 @@
             }
 
             // Phần I
-            addHeading("I. THÔNG TIN DOANH NGHIỆP ĐỀ NGHỊ CẤP PHÉP");
-            addKeyValue("1. Tên doanh nghiệp", d.companyName);
-            addKeyValue("2. Mã số doanh nghiệp / MST", d.taxCode);
-            addKeyValue("3. Người đại diện theo pháp luật", `${d.legalRep} (${d.repTitle})`);
-            addKeyValue("4. Địa chỉ trụ sở chính", d.companyAddress);
-            addKeyValue("5. Số Giấy phép cung cấp dịch vụ", d.licenseNumber);
+            addHeading("I. THÔNG TIN CHỦ THỂ QUYỀN / DOANH NGHIỆP");
+            addKeyValue("1. Tên chủ sở hữu / Doanh nghiệp", d.companyName);
+            addKeyValue("2. Mã số doanh nghiệp / CCCD", d.taxCode);
+            addKeyValue("3. Người đại diện / Tác giả", `${d.legalRep} (${d.repTitle})`);
+            addKeyValue("4. Địa chỉ liên hệ", d.companyAddress);
+            addKeyValue("5. Số Giấy phép / Số đăng ký liên quan", d.licenseNumber);
             addKeyValue("6. Điện thoại & Email liên hệ", d.contactInfo);
 
             // Phần II
-            addHeading("II. PHÂN LOẠI & NỘI DUNG KỊCH BẢN TRÒ CHƠI");
-            addKeyValue("1. Tên trò chơi", d.gameName);
-            addKeyValue("2. Phân nhóm trò chơi", d.gameGroup);
-            addKeyValue("3. Phân loại độ tuổi", d.ageRating);
-            addKeyValue("4. Nền tảng phát hành", d.gamePlatforms);
+            addHeading("II. THÔNG TIN CHI TIẾT TÁC PHẨM / TRÒ CHƠI");
+            addKeyValue("1. Tên tác phẩm / Trò chơi", d.gameName);
+            addKeyValue("2. Phân nhóm / Loại hình", d.gameGroup);
+            addKeyValue("3. Phân loại độ tuổi / Hình thức", d.ageRating);
+            addKeyValue("4. Nền tảng phát hành / Công bố", d.gamePlatforms);
             addKeyValue("5. Nguồn gốc & Bản quyền", d.copyrightInfo);
-            addMultilineSection("6. Cốt truyện & Bối cảnh trò chơi:", d.gameStory);
-            addMultilineSection("7. Mô tả chi tiết Gameplay & Tính năng tương tác:", d.gamePlay);
-            addMultilineSection("8. Phương án kiểm soát nội dung & tuân thủ độ tuổi:", d.contentControl);
+            addMultilineSection("6. Mô tả nội dung / Cốt truyện sáng tạo:", d.gameStory);
+            addMultilineSection("7. Chi tiết cấu trúc kỹ thuật / Gameplay:", d.gamePlay);
+            addMultilineSection("8. Phương án bảo vệ bản quyền & kiểm soát nội dung:", d.contentControl);
 
             // Phần III
-            addHeading("III. ĐỀ ÁN KỸ THUẬT & HẠ TẦNG MÁY CHỦ");
-            addMultilineSection("1. Thông tin hệ thống máy chủ & kết nối:", d.serverInfo);
-            addMultilineSection("2. Phương án đảm bảo an toàn thông tin & sao lưu dự phòng:", d.securityPlan);
+            addHeading(currentGameTab === 'SHTT' ? "III. TÀI LIỆU ĐÍNH KÈM & THÔNG TIN QUYỀN SỞ HỮU" : "III. ĐỀ ÁN KỸ THUẬT & HẠ TẦNG MÁY CHỦ");
+            addMultilineSection("1. Chi tiết hạ tầng / Danh mục tài liệu:", d.serverInfo);
+            addMultilineSection("2. Phương án bảo mật & an toàn thông tin:", d.securityPlan);
 
             // Phần IV
-            addHeading("IV. PHƯƠNG ÁN THANH TOÁN & NHÂN SỰ VẬN HÀNH");
-            addMultilineSection("1. Phương án thu phí & quản lý vật phẩm ảo:", d.paymentPlan);
-            addMultilineSection("2. Nhân sự quản trị & quy trình giải quyết khiếu nại:", d.supportPlan);
+            addHeading(currentGameTab === 'SHTT' ? "IV. CAM KẾT CỦA TÁC GIẢ & CHỦ SỞ HỮU" : "IV. PHƯƠNG ÁN THU PHÍ & VẬN HÀNH");
+            addMultilineSection("1. Phương án thương mại hóa / Khai thác:", d.paymentPlan);
+            addMultilineSection("2. Cam kết pháp lý & Nhân sự chịu trách nhiệm:", d.supportPlan);
 
             // Phần V: Hình ảnh
-            addHeading("V. PHỤ LỤC HÌNH ẢNH MINH HỌA & SƠ ĐỒ KIẾN TRÚC");
+            addHeading("V. PHỤ LỤC HÌNH ẢNH MINH HỌA & SƠ ĐỒ ĐÍNH KÈM");
             if (attachedImages.length === 0) {
                 children.push(
                     new Paragraph({
@@ -1068,7 +1235,7 @@
                     alignment: AlignmentType.RIGHT,
                     spacing: { before: 400, after: 80 },
                     children: [
-                        new TextRun({ text: "ĐẠI DIỆN THEO PHÁP LUẬT CỦA DOANH NGHIỆP", bold: true, size: 24, font: "Times New Roman" })
+                        new TextRun({ text: "ĐẠI DIỆN THEO PHÁP LUẬT / TÁC GIẢ", bold: true, size: 24, font: "Times New Roman" })
                     ]
                 }),
                 new Paragraph({
@@ -1094,8 +1261,8 @@
             });
 
             const blob = await Packer.toBlob(doc);
-            const safeName = (d.gameName !== "[TÊN TRÒ CHƠI]" ? d.gameName : `Game_${currentGameTab}`).replace(/[^a-zA-Z0-9_\u00C0-\u1EF9]/g, "_");
-            saveAs(blob, `Ho_So_Phat_Hanh_${currentGameTab}_${safeName}.docx`);
+            const safeName = (d.gameName !== "[TÊN TRÒ CHƠI / TÁC PHẨM]" ? d.gameName : `HoSo_${currentGameTab}`).replace(/[^a-zA-Z0-9_\u00C0-\u1EF9]/g, "_");
+            saveAs(blob, `HoSo_${currentGameTab}_${safeName}.docx`);
         }
 
         renderImageGallery();
