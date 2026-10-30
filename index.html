@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameLicense Pro VN - Công cụ lập hồ sơ Game G1 - G4</title>
+    <title>GameLicense Pro VN - Hệ thống lập hồ sơ & Hướng dẫn nộp G1, G2, G3, G4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
@@ -56,38 +56,69 @@
 
     <!-- Top Navigation Bar -->
     <header class="bg-[#0f172a] border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                     <i class="fa-solid fa-gamepad text-lg"></i>
                 </div>
                 <div>
                     <h1 class="font-bold text-white text-base leading-tight">GameLicense Pro VN</h1>
-                    <p class="text-xs text-slate-400">Công cụ lập hồ sơ & Đề án phát hành Game G1 - G4 chuẩn pháp lý</p>
+                    <p class="text-xs text-slate-400">Hệ thống lập hồ sơ & Hướng dẫn nộp thủ tục phát hành Game G1, G2, G3, G4</p>
                 </div>
             </div>
 
+            <!-- Global Action Buttons -->
             <div class="flex items-center gap-2.5">
-                <button type="button" id="btnTabEdit" onclick="switchTab('edit')" class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2">
+                <button type="button" onclick="switchView('generator')" id="navBtnGen" class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2">
                     <i class="fa-solid fa-pen-to-square"></i> Soạn Thảo Hồ Sơ
                 </button>
-                <button type="button" id="btnTabPreview" onclick="switchTab('preview')" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2">
-                    <i class="fa-solid fa-file-lines"></i> Xem Trước Văn Bản
+                <button type="button" onclick="switchView('preview')" id="navBtnPrev" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-lines"></i> Xem Trước Bản In
                 </button>
-                <button type="button" id="btnExportWord" onclick="exportToWord()" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 transition flex items-center gap-2 shadow-lg shadow-blue-600/20">
-                    <i class="fa-solid fa-file-word"></i> Xuất File Word (.docx)
+                <button type="button" onclick="switchView('guide')" id="navBtnGuide" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-circle-question"></i> Quy Trình & Hướng Dẫn Nộp
+                </button>
+                <button type="button" onclick="exportToWord()" class="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 transition flex items-center gap-2 shadow-lg shadow-blue-600/20">
+                    <i class="fa-solid fa-file-word"></i> Xuất File Word
                 </button>
             </div>
         </div>
     </header>
 
+    <!-- Sub-Navbar cho các loại Giấy tờ / Game (G1, G2, G3, G4) -->
+    <div class="bg-[#0f172a]/80 border-b border-slate-800/80 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2">
+            <button type="button" onclick="switchGameTab('G1')" id="tabBtnG1" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow">
+                <i class="fa-solid fa-server"></i> Game G1 (Tương tác mạng)
+            </button>
+            <button type="button" onclick="switchGameTab('G2')" id="tabBtnG2" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-network-wired"></i> Game G2 (Người chơi - Máy chủ)
+            </button>
+            <button type="button" onclick="switchGameTab('G3')" id="tabBtnG3" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-users"></i> Game G3 (Nhiều người chơi nội bộ)
+            </button>
+            <button type="button" onclick="switchGameTab('G4')" id="tabBtnG4" class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-laptop-code"></i> Game G4 (Offline / Tải về máy)
+            </button>
+        </div>
+    </div>
+
     <!-- Main Container -->
-    <main class="max-w-5xl w-full mx-auto px-4 py-8 flex-1">
+    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-1">
 
-        <!-- TAB 1: EDITOR -->
-        <div id="viewEdit" class="space-y-4">
+        <!-- VIEW 1: SOẠN THẢO HỒ SƠ (GENERATOR) -->
+        <div id="mainViewGenerator" class="space-y-6">
+            <div class="bg-slate-900 border border-slate-800 px-5 py-3 rounded-xl flex items-center justify-between">
+                <div>
+                    <h2 id="currentTabTitle" class="text-base font-bold text-emerald-400">Hồ sơ đề nghị cấp Giấy phép phát hành Trò chơi G1</h2>
+                    <p class="text-xs text-slate-400">Toàn bộ thông tin dưới đây hoàn toàn trống để bạn tự điền mới hoặc sao chép dữ liệu doanh nghiệp.</p>
+                </div>
+                <button type="button" onclick="clearAllFields()" class="text-xs text-rose-400 hover:underline px-3 py-1.5 bg-rose-950/40 border border-rose-900/50 rounded-lg">
+                    Xóa trống tất cả
+                </button>
+            </div>
 
-            <!-- Phần I: Thông tin Doanh nghiệp & Pháp lý -->
+            <!-- Phần I: Thông tin Doanh nghiệp -->
             <div class="section-card">
                 <button type="button" onclick="toggleAccordion('sec1')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
@@ -100,31 +131,31 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên doanh nghiệp phát hành *</label>
-                            <input type="text" id="companyName" class="input-dark text-sm" value="CÔNG TY TNHH DREAM STUDIO TEAM VN">
+                            <input type="text" id="companyName" class="input-dark text-sm" placeholder="VD: CÔNG TY TNHH ...">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Mã số doanh nghiệp / MST *</label>
-                            <input type="text" id="taxCode" class="input-dark text-sm" value="0123456789">
+                            <input type="text" id="taxCode" class="input-dark text-sm" placeholder="VD: 031xxxxxxx">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Người đại diện theo pháp luật *</label>
-                            <input type="text" id="legalRep" class="input-dark text-sm" value="Đinh Gia Huy">
+                            <input type="text" id="legalRep" class="input-dark text-sm" placeholder="VD: Nguyễn Văn A">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Chức vụ *</label>
-                            <input type="text" id="repTitle" class="input-dark text-sm" value="Giám đốc">
+                            <input type="text" id="repTitle" class="input-dark text-sm" placeholder="VD: Giám đốc / Tổng Giám đốc">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Địa chỉ trụ sở chính *</label>
-                            <input type="text" id="companyAddress" class="input-dark text-sm" value="TP. Hồ Chí Minh, Việt Nam">
+                            <input type="text" id="companyAddress" class="input-dark text-sm" placeholder="VD: Số nhà, Đường, Phường/Xã, Quận/Huyện, Tỉnh/Thành phố">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Số Giấy phép G1/G2/G3/G4 (nếu đã có giấy phép con)</label>
-                            <input type="text" id="licenseNumber" class="input-dark text-sm" placeholder="VD: 123/GP-BTTTT cấp ngày...">
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Số Giấy phép cung cấp dịch vụ G1 (nếu có)</label>
+                            <input type="text" id="licenseNumber" class="input-dark text-sm" placeholder="VD: Số ... /GP-BTTTT">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Điện thoại & Email liên hệ *</label>
-                            <input type="text" id="contactInfo" class="input-dark text-sm" value="0900000000 - contact@dreamstudio.vn">
+                            <input type="text" id="contactInfo" class="input-dark text-sm" placeholder="VD: 0900000000 - contact@company.com">
                         </div>
                     </div>
                 </div>
@@ -135,7 +166,7 @@
                 <button type="button" onclick="toggleAccordion('sec2')" class="w-full px-6 py-4 flex items-center justify-between bg-slate-900/60 hover:bg-slate-900 transition text-left">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-dice-d20 text-emerald-400"></i>
-                        <span class="font-bold text-base text-white">Phần II: Phân Loại & Kịch Bản Trò Chơi (G1, G2, G3, G4)</span>
+                        <span class="font-bold text-base text-white">Phần II: Phân Loại & Kịch Bản Chi Tiết Trò Chơi</span>
                     </div>
                     <i id="icon-sec2" class="fa-solid fa-chevron-up text-slate-400 transition-transform"></i>
                 </button>
@@ -143,16 +174,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên trò chơi (Tiếng Việt & Quốc tế) *</label>
-                            <input type="text" id="gameName" class="input-dark text-sm" value="Huyết Nguyệt Truyền Kỳ (Blood Moon RPG)">
+                            <input type="text" id="gameName" class="input-dark text-sm" placeholder="VD: Tên Game (English Name)">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân nhóm trò chơi *</label>
-                            <select id="gameGroup" class="input-dark text-sm">
-                                <option value="G1 - Trò chơi có sự tương tác giữa nhiều người chơi thông qua hệ thống máy chủ">G1 (Tương tác qua máy chủ)</option>
-                                <option value="G2 - Trò chơi chỉ có sự tương tác giữa người chơi với hệ thống máy chủ">G2 (Người chơi với máy chủ)</option>
-                                <option value="G3 - Trò chơi có sự tương tác giữa nhiều người chơi nhưng không có tương tác với máy chủ">G3 (Nhiều người chơi, không qua máy chủ)</option>
-                                <option value="G4 - Trò chơi tải về máy, không có sự tương tác giữa người chơi và với máy chủ">G4 (Offline tải về máy)</option>
-                            </select>
+                            <input type="text" id="gameGroupInput" class="input-dark text-sm" value="G1 - Trò chơi có sự tương tác giữa nhiều người chơi thông qua hệ thống máy chủ" readonly>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Phân loại độ tuổi *</label>
@@ -165,31 +191,27 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Nền tảng phát hành *</label>
-                            <input type="text" id="gamePlatforms" class="input-dark text-sm" value="Android (Google Play), iOS (App Store), PC">
+                            <input type="text" id="gamePlatforms" class="input-dark text-sm" placeholder="VD: Android, iOS, PC Web/Client">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Nguồn gốc bản quyền / Hợp đồng ủy quyền *</label>
-                            <input type="text" id="copyrightInfo" class="input-dark text-sm" value="Tự sản xuất và sở hữu bản quyền 100% tại Việt Nam">
+                            <input type="text" id="copyrightInfo" class="input-dark text-sm" placeholder="VD: Tự sản xuất / Hợp đồng chuyển nhượng bản quyền số...">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Cốt truyện & Bối cảnh trò chơi *</label>
-                        <textarea id="gameStory" rows="4" class="input-dark text-sm">Trò chơi lấy bối cảnh một thế giới giả tưởng thời trung cổ, nơi các vương quốc loài người chiến đấu chống lại thế lực hắc ám để bảo vệ hòa bình. Người chơi sẽ vào vai các hiệp sĩ, pháp sư thực hiện nhiệm vụ bảo vệ lãnh thổ, xây dựng liên minh và khám phá các vùng đất mới.</textarea>
+                        <textarea id="gameStory" rows="4" class="input-dark text-sm" placeholder="Nhập mô tả cốt truyện, bối cảnh, nhân vật..."></textarea>
                     </div>
 
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Mô tả chi tiết Gameplay & Tính năng tương tác *</label>
-                        <textarea id="gamePlay" rows="4" class="input-dark text-sm">- Hệ thống nhân vật phong phú với các kỹ năng đặc trưng có thể nâng cấp.
-- Cho phép người chơi giao lưu, kết bạn, lập bang hội (Guild) và tham gia các hoạt động chiến đấu tương tác trực tuyến giữa người chơi với người chơi (PvP, Guild War).
-- Hệ thống nhiệm vụ cốt truyện tuyến tính kết hợp sự kiện hàng ngày.</textarea>
+                        <textarea id="gamePlay" rows="4" class="input-dark text-sm" placeholder="Nhập các tính năng tương tác, PvP, Bang hội, nhiệm vụ..."></textarea>
                     </div>
 
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án kiểm soát nội dung, chống bạo lực & tuân thủ độ tuổi *</label>
-                        <textarea id="contentControl" rows="3" class="input-dark text-sm">- Thiết lập bộ lọc từ ngữ nhạy cảm trong hệ thống chat.
-- Khuyến cáo độ tuổi người chơi: Hiển thị cảnh báo 18+ rõ ràng ở màn hình đăng nhập và góc màn hình chơi game.
-- Có cơ chế giới hạn giờ chơi (không quá 180 phút/ngày) và đội ngũ vận hành kiểm duyệt 24/7.</textarea>
+                        <textarea id="contentControl" rows="3" class="input-dark text-sm" placeholder="Nhập biện pháp lọc chat, cảnh báo độ tuổi, giới hạn giờ chơi..."></textarea>
                     </div>
                 </div>
             </div>
@@ -206,15 +228,11 @@
                 <div id="sec3" class="p-6 space-y-4 border-t border-slate-800/80 hidden">
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Thông tin hệ thống máy chủ & Nhà cung cấp hạ tầng (ISP/Datacenter) *</label>
-                        <textarea id="serverInfo" rows="3" class="input-dark text-sm">- Đơn vị cung cấp chỗ đặt máy chủ / Cloud Server tại Việt Nam: Viettel IDC / FPT Telecom.
-- Cấu hình máy chủ ứng dụng: CPU 16 vCore, RAM 64GB, ổ cứng NVMe SSD 1TB RAID-10, băng thông trong nước 1Gbps.
-- Hệ quản trị cơ sở dữ liệu lưu trữ thông tin người chơi đặt tại Việt Nam, sao lưu tự động hàng ngày.</textarea>
+                        <textarea id="serverInfo" rows="3" class="input-dark text-sm" placeholder="Nhập tên nhà cung cấp Datacenter tại Việt Nam, cấu hình phần cứng, vị trí lưu trữ CSDL..."></textarea>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án đảm bảo an toàn thông tin, an ninh mạng & Sao lưu dự phòng *</label>
-                        <textarea id="securityPlan" rows="3" class="input-dark text-sm">- Trang bị tường lửa cứng (Hardware Firewall) và hệ thống chống tấn công từ chối dịch vụ (Anti-DDoS).
-- Mã hóa toàn bộ mật khẩu và thông tin định danh cá nhân của người chơi theo chuẩn SHA-256 / AES.
-- Lưu trữ lịch sử giao dịch và nhật ký kết nối (Log) tối thiểu 24 tháng theo quy định của cơ quan chức năng.</textarea>
+                        <textarea id="securityPlan" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin tường lửa, mã hóa dữ liệu, lịch sử sao lưu..."></textarea>
                     </div>
                 </div>
             </div>
@@ -231,15 +249,11 @@
                 <div id="sec4" class="p-6 space-y-4 border-t border-slate-800/80 hidden">
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Phương án thu phí, vật phẩm ảo & Quản lý đơn vị quy đổi *</label>
-                        <textarea id="paymentPlan" rows="3" class="input-dark text-sm">- Trò chơi sử dụng đơn vị ảo trong game là "Kim Cương", chỉ dùng để trao đổi vật phẩm trang bị, ngoại trang trong phạm vi trò chơi.
-- Cam kết KHÔNG có tính năng quy đổi vật phẩm ảo, điểm thưởng thành tiền mặt, thẻ thanh toán hoặc hiện vật có giá trị giao dịch bên ngoài trò chơi.
-- Kết nối thanh toán qua các cổng trung gian thanh toán được Ngân hàng Nhà nước cấp phép (VNPay, MoMo, ZaloPay, In-App Purchase chính thức).</textarea>
+                        <textarea id="paymentPlan" rows="3" class="input-dark text-sm" placeholder="Nhập quy định về đơn vị ảo, cổng thanh toán hợp pháp..."></textarea>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-300 mb-1.5">Nhân sự quản trị & Quy trình giải quyết khiếu nại khách hàng *</label>
-                        <textarea id="supportPlan" rows="3" class="input-dark text-sm">- Đội ngũ nhân sự kỹ thuật và chăm sóc khách hàng trực 24/7.
-- Kênh tiếp nhận hỗ trợ: Hotline, Email hỗ trợ chính thức và Hệ thống Ticket trong game.
-- Thời gian phản hồi và xử lý khiếu nại tối đa trong vòng 24 giờ làm việc kể từ khi tiếp nhận yêu cầu.</textarea>
+                        <textarea id="supportPlan" rows="3" class="input-dark text-sm" placeholder="Nhập thông tin bộ phận CSKH, thời gian phản hồi khiếu nại..."></textarea>
                     </div>
                 </div>
             </div>
@@ -260,7 +274,7 @@
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">1. Chọn file ảnh từ máy tính (hỗ trợ chọn nhiều ảnh)</label>
+                                <label class="block text-xs text-slate-400 mb-1">1. Chọn file ảnh từ máy tính</label>
                                 <input type="file" id="imgUploadInput" accept="image/*" multiple onchange="handleFileUpload(event)" class="block w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer">
                             </div>
                             <div>
@@ -293,7 +307,7 @@
                         <div class="flex flex-col sm:flex-row gap-3 items-end">
                             <div class="flex-1 w-full">
                                 <label class="block text-xs text-slate-400 mb-1">3. Chú thích chi tiết cho bức ảnh (sẽ in dưới ảnh trong file Word) *</label>
-                                <input type="text" id="imgCaptionInput" placeholder="VD: Hình cảnh báo giao diện 18+ ở góc màn hình" class="input-dark text-sm">
+                                <input type="text" id="imgCaptionInput" placeholder="VD: Hình 1 - Sơ đồ tổng quát kiến trúc hệ thống máy chủ" class="input-dark text-sm">
                             </div>
                             <button type="button" onclick="addImageByUrlOrPending()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg transition shrink-0 flex items-center gap-2 shadow-lg shadow-emerald-600/20">
                                 <i class="fa-solid fa-plus"></i> Gán Ảnh Vào Hồ Sơ
@@ -317,8 +331,8 @@
 
         </div>
 
-        <!-- TAB 2: DOCUMENT PREVIEW -->
-        <div id="viewPreview" class="hidden">
+        <!-- VIEW 2: XEM TRƯỚC VĂN BẢN (PREVIEW) -->
+        <div id="mainViewPreview" class="hidden">
             <div class="mb-4 flex items-center justify-between bg-slate-900 border border-slate-800 px-4 py-3 rounded-xl">
                 <span class="text-sm text-slate-300"><i class="fa-solid fa-eye text-emerald-400 mr-2"></i>Chế độ xem trước bản in chuẩn hành chính khổ A4</span>
                 <button type="button" onclick="exportToWord()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
@@ -330,6 +344,18 @@
             </div>
         </div>
 
+        <!-- VIEW 3: QUY TRÌNH & HƯỚNG DẪN NỘP (GUIDE) -->
+        <div id="mainViewGuide" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <h2 id="guideTitle" class="text-lg font-bold text-emerald-400 mb-2">Quy trình pháp lý & Hướng dẫn nộp hồ sơ phát hành Game G1</h2>
+                <p class="text-sm text-slate-300 mb-6" id="guideSubtitle">Chi tiết các bước chuẩn bị hồ sơ, cơ quan tiếp nhận và thủ tục nộp theo quy định pháp luật.</p>
+
+                <div id="guideContentArea" class="space-y-6 text-sm text-slate-200">
+                    <!-- Dynamic Guide Content injected via JS -->
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Clean Footer -->
@@ -338,8 +364,187 @@
     </footer>
 
     <script>
+        let currentGameTab = 'G1';
+        let currentView = 'generator'; // generator, preview, guide
         let attachedImages = [];
         let pendingUploadedFiles = [];
+
+        // Cấu hình dữ liệu text cho từng loại game khi chuyển tab
+        const gameConfigs = {
+            G1: {
+                title: "Hồ sơ đề nghị cấp Giấy phép phát hành Trò chơi điện tử G1 trên mạng",
+                groupText: "G1 - Trò chơi có sự tương tác giữa nhiều người chơi thông qua hệ thống máy chủ",
+                guideHtml: `
+                    <div class="space-y-5">
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Căn cứ pháp lý & Điều kiện cấp phép G1</h3>
+                            <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                                <li>Nghị định 147/2024/NĐ-CP về quản lý, cung cấp, sử dụng dịch vụ internet và thông tin trên mạng (thay thế Nghị định 72/2013/NĐ-CP).</li>
+                                <li>Doanh nghiệp phải có Giấy chứng nhận đăng ký kinh doanh có ngành nghề cung cấp dịch vụ trò chơi điện tử trên mạng.</li>
+                                <li>Phải có Giấy phép cung cấp dịch vụ trò chơi điện tử G1 trước khi đề nghị cấp quyết định phê duyệt nội dung, kịch bản trò chơi.</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ đầy đủ nộp cơ quan chức năng</h3>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
+                                <li>Đơn đề nghị cấp Giấy phép phát hành trò chơi G1 (theo mẫu).</li>
+                                <li>Giấy chứng nhận đăng ký doanh nghiệp (bản sao có chứng thực).</li>
+                                <li>Đề án phát hành trò chơi (bao gồm thông tin doanh nghiệp, kịch bản, nhân vật, cốt truyện, biện pháp bảo vệ người chơi).</li>
+                                <li>Đề án kỹ thuật (thông tin thiết bị máy chủ tại Việt Nam, phương án bảo mật, sao lưu dữ liệu).</li>
+                                <li>Phương án tài chính, thanh toán, quản lý vật phẩm ảo và chăm sóc khách hàng.</li>
+                                <li>Văn bản xác nhận quyền sở hữu hoặc quyền hợp pháp khai thác/phân phối trò chơi tại Việt Nam (Hợp đồng chuyển nhượng/ủy quyền tiếng Việt hợp pháp hóa lãnh sự nếu mua từ nước ngoài).</li>
+                            </ol>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp hồ sơ & Trình tự thực hiện</h3>
+                            <ul class="space-y-2 text-slate-300 text-xs">
+                                <li><b>Cơ quan tiếp nhận:</b> Bộ Thông tin và Truyền thông (Cục Phát thanh, Truyền hình và Thông tin điện tử - PTTH&TTĐT).</li>
+                                <li><b>Hình thức nộp:</b> Nộp trực tuyến qua Cổng dịch vụ công trực tuyến của Bộ TTTT hoặc nộp trực tiếp/qua đường bưu điện.</li>
+                                <li><b>Thời hạn giải quyết:</b> Trong thời hạn 30 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ, cơ quan có thẩm quyền sẽ xem xét và cấp phép.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            G2: {
+                title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G2 (Tương tác với máy chủ)",
+                groupText: "G2 - Trò chơi chỉ có sự tương tác giữa người chơi với hệ thống máy chủ",
+                guideHtml: `
+                    <div class="space-y-5">
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định pháp lý đối với Game G2</h3>
+                            <p class="text-xs text-slate-300">Trò chơi G2 là trò chơi điện tử có sự tương tác giữa người chơi với hệ thống máy chủ của doanh nghiệp cung cấp dịch vụ nhưng không có sự tương tác giữa các người chơi với nhau. Doanh nghiệp cần thực hiện thủ tục thông báo/đăng ký cung cấp theo quy định hiện hành.</p>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ chuẩn bị</h3>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
+                                <li>Văn bản thông báo/đăng ký cung cấp trò chơi điện tử G2.</li>
+                                <li>Bản sao Giấy chứng nhận đăng ký doanh nghiệp.</li>
+                                <li>Mô tả chi tiết kịch bản, nội dung, giao diện và cách thức chơi trò chơi.</li>
+                                <li>Phương án kỹ thuật, địa điểm đặt máy chủ tại Việt Nam đảm bảo lưu trữ dữ liệu.</li>
+                            </ol>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp & Thời hạn</h3>
+                            <ul class="space-y-2 text-slate-300 text-xs">
+                                <li><b>Cơ quan tiếp nhận:</b> Sở Thông tin và Truyền thông tại địa phương nơi doanh nghiệp đặt trụ sở chính (hoặc Cục PTTH&TTĐT tùy theo phân cấp).</li>
+                                <li><b>Thời hạn xử lý:</b> Thường từ 15 đến 20 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ.</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            G3: {
+                title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G3 (Nhiều người chơi nội bộ)",
+                groupText: "G3 - Trò chơi có sự tương tác giữa nhiều người chơi nhưng không có tương tác với máy chủ",
+                guideHtml: `
+                    <div class="space-y-5">
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Đặc điểm pháp lý Game G3</h3>
+                            <p class="text-xs text-slate-300">Trò chơi G3 bao gồm các tựa game cho phép nhiều người chơi tương tác trực tiếp với nhau (qua mạng ngang hàng P2P hoặc kết nối cục bộ) nhưng không thông qua hệ thống máy chủ quản lý trò chơi trung tâm.</p>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
+                                <li>Văn bản đăng ký cung cấp trò chơi G3.</li>
+                                <li>Giấy chứng nhận đăng ký doanh nghiệp có chức năng phát hành game.</li>
+                                <li>Bản mô tả chi tiết phương thức kết nối mạng giữa những người chơi và nội dung kịch bản game.</li>
+                            </ol>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Hướng dẫn nộp hồ sơ</h3>
+                            <p class="text-xs text-slate-300">Nộp trực tiếp hoặc qua cổng thông tin điện tử của Sở Thông tin và Truyền thông tỉnh/thành phố nơi doanh nghiệp hoạt động.</p>
+                        </div>
+                    </div>
+                `
+            },
+            G4: {
+                title: "Hồ sơ đăng ký cung cấp Trò chơi điện tử G4 (Offline / Tải về máy)",
+                groupText: "G4 - Trò chơi tải về máy, không có sự tương tác giữa người chơi và với máy chủ",
+                guideHtml: `
+                    <div class="space-y-5">
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-emerald-400"></i> 1. Quy định đối với Game G4 (Offline)</h3>
+                            <p class="text-xs text-slate-300">Trò chơi G4 là trò chơi tải về thiết bị di động hoặc máy tính (Offline), không có kết nối tương tác trực tuyến với máy chủ trong quá trình chơi. Doanh nghiệp cần đảm bảo nội dung game tuân thủ thuần phong mỹ tục và không vi phạm các điều cấm.</p>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-folder-open text-emerald-400"></i> 2. Thành phần hồ sơ</h3>
+                            <ol class="list-decimal list-inside space-y-1.5 text-slate-300 text-xs">
+                                <li>Đơn/Văn bản đăng ký phát hành trò chơi G4.</li>
+                                <li>Bản sao Giấy phép kinh doanh của doanh nghiệp.</li>
+                                <li>Bản mô tả tóm tắt nội dung, cốt truyện, hình ảnh và độ tuổi khuyến cáo.</li>
+                            </ol>
+                        </div>
+
+                        <div class="p-4 bg-slate-800/60 border border-slate-700 rounded-lg">
+                            <h3 class="font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-paper-plane text-emerald-400"></i> 3. Nơi nộp hồ sơ</h3>
+                            <p class="text-xs text-slate-300">Nộp tại Sở Thông tin và Truyền thông địa phương hoặc cơ quan quản lý chuyên ngành.</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function switchGameTab(gameType) {
+            currentGameTab = gameType;
+
+            // Highlight active tab button
+            ['G1', 'G2', 'G3', 'G4'].forEach(g => {
+                const btn = document.getElementById('tabBtn' + g);
+                if (g === gameType) {
+                    btn.className = "px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow";
+                } else {
+                    btn.className = "px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center gap-2 shrink-0";
+                }
+            });
+
+            // Update titles and hidden inputs
+            const config = gameConfigs[gameType];
+            document.getElementById('currentTabTitle').textContent = config.title;
+            document.getElementById('gameGroupInput').value = config.groupText;
+            document.getElementById('guideTitle').textContent = "Quy trình pháp lý & Hướng dẫn nộp hồ sơ phát hành " + gameType;
+            document.getElementById('guideSubtitle').textContent = config.title;
+            document.getElementById('guideContentArea').innerHTML = config.guideHtml;
+        }
+
+        function switchView(viewName) {
+            currentView = viewName;
+            const genView = document.getElementById('mainViewGenerator');
+            const prevView = document.getElementById('mainViewPreview');
+            const guideView = document.getElementById('mainViewGuide');
+
+            const btnGen = document.getElementById('navBtnGen');
+            const btnPrev = document.getElementById('navBtnPrev');
+            const btnGuide = document.getElementById('navBtnGuide');
+
+            // Reset all buttons
+            [btnGen, btnPrev, btnGuide].forEach(b => {
+                b.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2";
+            });
+
+            genView.classList.add('hidden');
+            prevView.classList.add('hidden');
+            guideView.classList.add('hidden');
+
+            if (viewName === 'generator') {
+                genView.classList.remove('hidden');
+                btnGen.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2";
+            } else if (viewName === 'preview') {
+                renderDocumentPreview();
+                prevView.classList.remove('hidden');
+                btnPrev.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2";
+            } else if (viewName === 'guide') {
+                guideView.classList.remove('hidden');
+                btnGuide.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2";
+            }
+        }
 
         function toggleAccordion(id) {
             const el = document.getElementById(id);
@@ -355,24 +560,14 @@
             }
         }
 
-        function switchTab(tab) {
-            const viewEdit = document.getElementById('viewEdit');
-            const viewPreview = document.getElementById('viewPreview');
-            const btnEdit = document.getElementById('btnTabEdit');
-            const btnPreview = document.getElementById('btnTabPreview');
-
-            if (tab === 'edit') {
-                viewEdit.classList.remove('hidden');
-                viewPreview.classList.add('hidden');
-                btnEdit.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2";
-                btnPreview.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2";
-            } else {
-                renderDocumentPreview();
-                viewEdit.classList.add('hidden');
-                viewPreview.classList.remove('hidden');
-                btnPreview.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2";
-                btnEdit.className = "px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-200 hover:bg-slate-700 transition flex items-center gap-2";
-            }
+        function clearAllFields() {
+            if (!confirm("Bạn có chắc chắn muốn xóa toàn bộ thông tin đã nhập không?")) return;
+            const ids = ['companyName', 'taxCode', 'legalRep', 'repTitle', 'companyAddress', 'licenseNumber', 'contactInfo', 'gameName', 'gamePlatforms', 'copyrightInfo', 'gameStory', 'gamePlay', 'contentControl', 'serverInfo', 'securityPlan', 'paymentPlan', 'supportPlan', 'imgUrlInput', 'imgCaptionInput'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            clearAllImages();
         }
 
         function readFileAsDataURL(file) {
@@ -471,7 +666,6 @@
             const captionInput = document.getElementById('imgCaptionInput');
             const fileInput = document.getElementById('imgUploadInput');
 
-            // Fallback: Nếu người dùng chọn file nhưng sự kiện onchange chưa kịp lưu hoặc vừa chọn xong bấm ngay
             if (pendingUploadedFiles.length === 0 && fileInput.files && fileInput.files.length > 0) {
                 for (const f of Array.from(fileInput.files)) {
                     const res = await readFileAsDataURL(f);
@@ -482,7 +676,6 @@
             const category = categoryInput.value;
             const userCaption = captionInput.value.trim();
 
-            // Trường hợp 1: Có file tải lên từ máy tính
             if (pendingUploadedFiles.length > 0) {
                 let addedCount = 0;
                 for (let i = 0; i < pendingUploadedFiles.length; i++) {
@@ -515,15 +708,9 @@
                 return;
             }
 
-            // Trường hợp 2: Dán link ảnh URL
             const rawUrl = urlInput.value.trim();
             if (!rawUrl) {
-                alert("Vui lòng bấm 'Choose File' để chọn ảnh từ máy tính hoặc dán link URL ảnh hợp lệ!");
-                return;
-            }
-
-            if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://') && !rawUrl.startsWith('data:image/')) {
-                alert("Đường dẫn URL ảnh không hợp lệ (cần bắt đầu bằng https:// hoặc chọn trực tiếp file ảnh từ máy tính ở mục số 1).");
+                alert("Vui lòng chọn file ảnh từ máy tính hoặc dán link URL ảnh hợp lệ!");
                 return;
             }
 
@@ -543,7 +730,7 @@
                 renderImageGallery();
                 showStatusMessage("✔ Đã gán ảnh từ URL thành công!");
             } catch (e) {
-                alert("Không thể tải ảnh từ URL này (do link không phải ảnh trực tiếp hoặc bị chặn CORS). Bạn hãy chọn file ảnh trực tiếp từ máy tính ở mục số 1 nhé!");
+                alert("Không thể tải ảnh từ URL này (do bị chặn CORS). Bạn hãy chọn file trực tiếp từ máy tính nhé!");
             }
         }
 
@@ -589,7 +776,7 @@
                         </button>
                     </div>
                     <div class="p-3 flex-1 flex flex-col justify-between">
-                        <label class="text-[11px] text-slate-400 mb-1">Chú thích ảnh trong tài liệu (có thể sửa trực tiếp):</label>
+                        <label class="text-[11px] text-slate-400 mb-1">Chú thích ảnh trong tài liệu:</label>
                         <input type="text" value="${img.caption.replace(/"/g, '&quot;')}" oninput="updateImageCaption(${img.id}, this.value)" class="input-dark text-xs">
                     </div>
                 </div>
@@ -597,26 +784,27 @@
         }
 
         function getFormData() {
+            const config = gameConfigs[currentGameTab];
             return {
-                companyName: document.getElementById('companyName').value.trim(),
-                taxCode: document.getElementById('taxCode').value.trim(),
-                legalRep: document.getElementById('legalRep').value.trim(),
-                repTitle: document.getElementById('repTitle').value.trim(),
-                companyAddress: document.getElementById('companyAddress').value.trim(),
+                companyName: document.getElementById('companyName').value.trim() || "[TÊN DOANH NGHIỆP]",
+                taxCode: document.getElementById('taxCode').value.trim() || "[MÃ SỐ DOANH NGHIỆP]",
+                legalRep: document.getElementById('legalRep').value.trim() || "[NGƯỜI ĐẠI DIỆN]",
+                repTitle: document.getElementById('repTitle').value.trim() || "[CHỨC VỤ]",
+                companyAddress: document.getElementById('companyAddress').value.trim() || "[ĐỊA CHỈ TRỤ SỞ]",
                 licenseNumber: document.getElementById('licenseNumber').value.trim() || "Đang thực hiện thủ tục cấp mới",
-                contactInfo: document.getElementById('contactInfo').value.trim(),
-                gameName: document.getElementById('gameName').value.trim(),
-                gameGroup: document.getElementById('gameGroup').value,
+                contactInfo: document.getElementById('contactInfo').value.trim() || "[THÔNG TIN LIÊN HỆ]",
+                gameName: document.getElementById('gameName').value.trim() || "[TÊN TRÒ CHƠI]",
+                gameGroup: config.groupText,
                 ageRating: document.getElementById('ageRating').value,
-                gamePlatforms: document.getElementById('gamePlatforms').value.trim(),
-                copyrightInfo: document.getElementById('copyrightInfo').value.trim(),
-                gameStory: document.getElementById('gameStory').value.trim(),
-                gamePlay: document.getElementById('gamePlay').value.trim(),
-                contentControl: document.getElementById('contentControl').value.trim(),
-                serverInfo: document.getElementById('serverInfo').value.trim(),
-                securityPlan: document.getElementById('securityPlan').value.trim(),
-                paymentPlan: document.getElementById('paymentPlan').value.trim(),
-                supportPlan: document.getElementById('supportPlan').value.trim()
+                gamePlatforms: document.getElementById('gamePlatforms').value.trim() || "[NỀN TẢNG PHÁT HÀNH]",
+                copyrightInfo: document.getElementById('copyrightInfo').value.trim() || "[NGUỒN GỐC BẢN QUYỀN]",
+                gameStory: document.getElementById('gameStory').value.trim() || "(Chưa nhập cốt truyện trò chơi)",
+                gamePlay: document.getElementById('gamePlay').value.trim() || "(Chưa nhập mô tả gameplay)",
+                contentControl: document.getElementById('contentControl').value.trim() || "(Chưa nhập phương án kiểm soát nội dung)",
+                serverInfo: document.getElementById('serverInfo').value.trim() || "(Chưa nhập thông tin hệ thống máy chủ)",
+                securityPlan: document.getElementById('securityPlan').value.trim() || "(Chưa nhập phương án an toàn thông tin)",
+                paymentPlan: document.getElementById('paymentPlan').value.trim() || "(Chưa nhập phương án thu phí)",
+                supportPlan: document.getElementById('supportPlan').value.trim() || "(Chưa nhập phương án chăm sóc khách hàng)"
             };
         }
 
@@ -644,7 +832,7 @@
                 <div style="display: flex; justify-content: space-between; margin-bottom: 24px; text-align: center;">
                     <div style="width: 45%;">
                         <p style="font-weight: bold; font-size: 11pt; text-transform: uppercase; margin: 0;">${d.companyName}</p>
-                        <p style="font-size: 11pt; margin: 4px 0 0 0;">Số: 01/ĐA-PHG</p>
+                        <p style="font-size: 11pt; margin: 4px 0 0 0;">Số: 01/ĐA-${currentGameTab}</p>
                         <hr style="width: 35%; border-top: 1px solid #000; margin: 6px auto;" />
                     </div>
                     <div style="width: 53%;">
@@ -656,7 +844,7 @@
                 </div>
 
                 <div style="text-align: center; margin: 28px 0 24px 0;">
-                    <h2 style="font-size: 14pt; font-weight: bold; margin: 0;">HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG</h2>
+                    <h2 style="font-size: 14pt; font-weight: bold; margin: 0;">HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG (${currentGameTab})</h2>
                     <p style="font-size: 12.5pt; font-weight: bold; margin-top: 6px;">Tên trò chơi: ${d.gameName}</p>
                     <p style="font-size: 11pt; font-style: italic;">(${d.gameGroup})</p>
                 </div>
@@ -742,7 +930,7 @@
                     alignment: AlignmentType.CENTER,
                     spacing: { before: 200, after: 120 },
                     children: [
-                        new TextRun({ text: "HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG", bold: true, size: 28, font: "Times New Roman" })
+                        new TextRun({ text: `HỒ SƠ ĐỀ ÁN PHÁT HÀNH TRÒ CHƠI ĐIỆN TỬ TRÊN MẠNG (${currentGameTab})`, bold: true, size: 28, font: "Times New Roman" })
                     ]
                 }),
                 new Paragraph({
@@ -906,11 +1094,12 @@
             });
 
             const blob = await Packer.toBlob(doc);
-            const safeName = (d.gameName || "Ho_So_Game").replace(/[^a-zA-Z0-9_\u00C0-\u1EF9]/g, "_");
-            saveAs(blob, `Ho_So_Cap_Phep_${safeName}.docx`);
+            const safeName = (d.gameName !== "[TÊN TRÒ CHƠI]" ? d.gameName : `Game_${currentGameTab}`).replace(/[^a-zA-Z0-9_\u00C0-\u1EF9]/g, "_");
+            saveAs(blob, `Ho_So_Phat_Hanh_${currentGameTab}_${safeName}.docx`);
         }
 
         renderImageGallery();
+        switchGameTab('G1');
     </script>
 </body>
 </html>
