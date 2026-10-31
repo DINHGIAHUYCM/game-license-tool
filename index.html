@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameLicense Pro VN - Hệ thống lập hồ sơ, SHTT & Hướng dẫn nộp G1-G4</title>
+    <title>Dream Studio Team VN - Game License Creator</title>
     <script src="https://cdn.tailwindcss.com"></script>
 <script>const _R={50:'#fef2f2',100:'#fee2e2',200:'#fecaca',300:'#fca5a5',400:'#f87171',500:'#ef4444',600:'#dc2626',700:'#b91c1c',800:'#991b1b',900:'#7f1d1d',950:'#450a0a'},_W={50:'#fbf6f6',100:'#f5ebec',200:'#ead9db',300:'#d6c3c5',400:'#b89a9d',500:'#8a5d62',600:'#5c3338',700:'#3d2023',800:'#2a1517',900:'#1c0f10',950:'#14090a'};
 tailwind.config={theme:{extend:{colors:{emerald:_R,blue:_R,indigo:_R,slate:_W}}}}</script>
@@ -65,6 +65,7 @@ body{padding-bottom:4.5rem}footer{display:none}[id^="icon-sec"]{display:none}.se
 .gl-miss{border-color:#ef4444!important;box-shadow:0 0 0 2px rgba(239,68,68,.35)!important}
 .gst:disabled{opacity:.35}.gst.cur{border-color:#ef4444;color:#fff}
 #glBar details>div .gb{text-align:left}#glBar summary::-webkit-details-marker{display:none}
+.ed{background:rgba(239,68,68,.12);border-bottom:1px dashed #ef4444;cursor:text;padding:0 2px;border-radius:2px}.ed:hover{background:rgba(239,68,68,.25)}.ed.empty{color:#b91c1c;font-style:italic}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
 </head>
@@ -78,7 +79,7 @@ body{padding-bottom:4.5rem}footer{display:none}[id^="icon-sec"]{display:none}.se
                     <i class="fa-solid fa-gamepad text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-white text-base leading-tight">GameLicense Pro VN</h1>
+                    <h1 class="font-bold text-white text-base leading-tight">Dream Studio Team VN - Game License Creator</h1>
                     
                 </div>
             </div>
@@ -384,7 +385,7 @@ body{padding-bottom:4.5rem}footer{display:none}[id^="icon-sec"]{display:none}.se
         <!-- VIEW 2: XEM TRƯỚC VĂN BẢN (PREVIEW) -->
         <div id="mainViewPreview" class="hidden">
             <div class="mb-4 flex items-center justify-between bg-slate-900 border border-slate-800 px-4 py-3 rounded-xl">
-                <span class="text-sm text-slate-300"><i class="fa-solid fa-eye text-emerald-400 mr-2"></i>Xem trước bản in (A4)</span>
+                <span class="text-sm text-slate-300"><i class="fa-solid fa-eye text-emerald-400 mr-2"></i>Bấm vào chữ màu hồng để sửa nhanh</span>
                 <button type="button" onclick="exportToWord()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
                     <i class="fa-solid fa-download mr-1"></i> Tải file Word</button><button type="button" onclick="glDocs()" class="ml-2 px-4 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-white hover:bg-slate-600"><i class="fa-brands fa-google-drive mr-1"></i> Google Docs
                 </button>
@@ -1318,7 +1319,7 @@ body{padding-bottom:4.5rem}footer{display:none}[id^="icon-sec"]{display:none}.se
 
 <script>
 const $=id=>document.getElementById(id),esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const STEPS=['Chọn loại','Chủ thể','Tác phẩm','Kỹ thuật','Vận hành','Hình ảnh','Rà soát','Nộp hồ sơ'];
+const STEPS=['Chọn loại','Chủ thể','Tác phẩm','Kỹ thuật','Vận hành','Hình ảnh','Giấy tờ','Hồ sơ mẫu'];
 let P=null,glT=null;
 const DB=new Promise((ok,no)=>{const r=indexedDB.open('gl_pro',1);r.onupgradeneeded=()=>r.result.createObjectStore('p',{keyPath:'id'});r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 const tx=(m,f)=>DB.then(d=>new Promise((ok,no)=>{const q=f(d.transaction('p',m).objectStore('p'));q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)}));
@@ -1390,7 +1391,7 @@ function ckItems(){return DOCS.filter(d=>d[2].split(' ').includes(P.type))}
 function refresh(){if(!P)return;let done=0;const S=[],lab=[];
  S[0]=P.ok?2:0;for(let i=1;i<=4;i++){const[n,t]=secProg('sec'+i);S[i]=n&&n===t?2:n?1:0;lab[i]=n+'/'+t}
  S[5]=attachedImages.length?2:0;lab[5]=attachedImages.length+' ảnh';S[6]=P.rev?2:0;
- const al=ckItems().map((d,i)=>[d,i]).filter(x=>x[0][3]),c=al.filter(x=>P.checks[P.type+x[1]]).length;S[7]=al.length&&c===al.length?2:c?1:0;lab[7]=c+'/'+al.length+' bắt buộc';
+ const al=ckItems().map((d,i)=>[d,i]).filter(x=>x[0][3]),c=al.filter(x=>P.checks[P.type+x[1]]).length;S[6]=al.length&&c===al.length?2:c?1:0;S[7]=P.rev?2:0;lab[7]=c+'/'+al.length+' bắt buộc';
  S.forEach(v=>done+=v==2?1:v==1?.5:0);
  $('glSteps').innerHTML=STEPS.map((n,i)=>`<button class="gst s${S[i]}${i+1===P.cur?' cur':''}" ${i+1>(P.max||(P.ok?8:1))?'disabled':''} onclick="glStep(${i+1})"><b>${S[i]==2?'✓':i+1}</b>${i+1===P.cur?n:''}</button>`).join('');
  $('glProg').style.width=Math.round(done/8*100)+'%'}
@@ -1405,7 +1406,7 @@ function go(i){P.cur=i;P.max=Math.max(P.max||(P.ok?8:1),i);const g=$('mainViewGe
  $('glS1').classList.toggle('hidden',i!==1);
  if(i===1){['mainViewGenerator','mainViewPreview','mainViewGuide'].forEach(x=>$(x).classList.add('hidden'));s1render()}
  else if(i<=6){switchView('generator');[...g.children].forEach((c,k)=>c.style.display=k===i-1?'':'none');$('sec'+(i-1)).classList.remove('hidden')}
- else switchView(i===7?'preview':'guide');
+ else switchView(i===7?'guide':'preview');
  $('glBackB').style.visibility=i>1?'visible':'hidden';$('glNavT').textContent='Bước '+i+'/8 · '+STEPS[i-1];$('glNextB').textContent=i===8?'Tải file Word':'Tiếp theo →';
  refresh();scrollTo(0,0);glSched()}
 function glNext(){const c=P.cur;
@@ -1421,10 +1422,10 @@ function glCoRender(){if(!P)return;const n=P.co==='n';$('coY').style.background=
  <label class="flex gap-2 text-slate-200"><input type="checkbox" ${P.cb?'checked':''} onchange="P.cb=this.checked;glSched()"> Tôi đã có giấy bản quyền (có thể nhờ phát hành)</label>
  <div class="text-slate-400">DREAM STUDIO TEAM VN CO., LTD · MST 1900702194 · 0836253400 · ${DST_EMAIL}</div>
  <button type="button" class="gb" style="background:#dc2626;color:#fff" onclick="glMail()">Gửi email liên hệ</button></div>`}
-function glMail(){collect();const b=`Xin chào Dream Studio Team VN,\n\nTôi muốn nhờ hỗ trợ pháp nhân phát hành game.\n- Tên game: ${P.f.gameName||'(chưa nhập)'}\n- Loại hồ sơ: ${P.type}\n- Tình trạng công ty: chưa có\n- Giấy chứng nhận bản quyền: ${P.cb?'Đã có':'Chưa có'}\n- Người liên hệ: ${P.f.legalRep||''} ${P.f.contactInfo||''}\n\nXin cảm ơn.`;
- navigator.clipboard&&navigator.clipboard.writeText(b).catch(()=>{});
- location.href='mailto:'+DST_EMAIL+'?subject='+encodeURIComponent('Đề nghị hỗ trợ pháp nhân phát hành game - '+(P.f.gameName||P.name||''))+'&body='+encodeURIComponent(b);
- toast(DST_EMAIL?'Đang mở email tới '+DST_EMAIL:'Chưa cài email nhận: nội dung đã được sao chép, hãy dán vào email gửi Dream Studio Team VN')}
+function glMail(){collect();const q=encodeURIComponent,sub='Đề nghị hỗ trợ pháp nhân phát hành game - '+(P.f.gameName||P.name||''),
+ b=`Xin chào Dream Studio Team VN,\n\nTôi muốn nhờ hỗ trợ pháp nhân phát hành game.\n- Tên game: ${P.f.gameName||'(chưa nhập)'}\n- Loại hồ sơ: ${P.type}\n- Tình trạng công ty: ${P.co==='y'?'đã có':'chưa có'}\n- Giấy chứng nhận bản quyền: ${P.cb?'Đã có':'Chưa có'}\n- Người liên hệ: ${P.f.legalRep||''} ${P.f.contactInfo||''}\n\nXin cảm ơn.`;window._mb=b;
+ modal(`<h3 class="font-bold text-white mb-1">Gửi email cho Dream Studio Team VN</h3><p class="text-xs text-slate-400 mb-2">${DST_EMAIL}</p><textarea readonly rows="8" class="input-dark text-xs">${esc(b)}</textarea>
+ <div class="flex flex-wrap gap-2 mt-3"><a class="gb" style="background:#dc2626;color:#fff" target="_blank" rel="noopener" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=${DST_EMAIL}&amp;su=${q(sub)}&amp;body=${q(b)}"><i class="fa-solid fa-envelope"></i> Mở Gmail</a><a class="gb" href="mailto:${DST_EMAIL}?subject=${q(sub)}&amp;body=${q(b)}">Ứng dụng Mail</a><button class="gb" onclick="navigator.clipboard.writeText(window._mb).then(()=>toast('Đã sao chép nội dung'),()=>toast('Hãy bôi đen và sao chép thủ công'))">Sao chép nội dung</button><button class="gb" onclick="glClose()">Đóng</button></div>`)}
 /* ---- Mở file & chèn nhanh ---- */
 const KV={'Tên chủ sở hữu / Doanh nghiệp':'companyName','Mã số doanh nghiệp / CCCD':'taxCode','Người đại diện / Tác giả':'legalRep','Địa chỉ liên hệ':'companyAddress','Số Giấy phép / Số đăng ký liên quan':'licenseNumber','Điện thoại & Email liên hệ':'contactInfo','Tên tác phẩm / Trò chơi':'gameName','Nền tảng phát hành / Công bố':'gamePlatforms','Nguồn gốc & Bản quyền':'copyrightInfo'};
 const ML={'Mô tả nội dung':'gameStory','Chi tiết cấu trúc':'gamePlay','Phương án bảo vệ':'contentControl','Chi tiết hạ tầng':'serverInfo','Phương án bảo mật':'securityPlan','Phương án thương mại':'paymentPlan','Cam kết pháp lý':'supportPlan'};
@@ -1445,16 +1446,38 @@ function glQuick(txt){modal(`<h3 class="font-bold text-white mb-2">Chèn nhanh n
 function glIns(){const t=$('qTxt'),s=t.selectionStart!==t.selectionEnd?t.value.slice(t.selectionStart,t.selectionEnd):t.value,el=$($('qTo').value);if(!s.trim())return;
  el.value=$('qMode').value==='r'||!el.value?s.trim():el.value+'\n'+s.trim();glSched();toast('Đã chèn vào: '+$('qTo').selectedOptions[0].text)}
 /* ---- Google Docs ---- */
-async function glDocs(){renderDocumentPreview();const h=$('a4PreviewContainer').innerHTML;let ok=false;
- try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([$('a4PreviewContainer').innerText],{type:'text/plain'})})]);ok=true}catch(e){
-  const d=document.createElement('div');d.innerHTML=h;d.style.cssText='position:fixed;left:-9999px';document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();d.remove()}
- P.rev=1;save();if(ok){toast('Đã sao chép hồ sơ. Trong Google Docs nhấn Ctrl+V để dán.');window.open('https://docs.new','_blank')}else alert('Không sao chép được. Hãy dùng "Xuất File Word" rồi tải lên Google Drive.')}
+function cleanTpl(c){c.querySelectorAll('[data-go]').forEach(x=>x.remove());c.querySelectorAll('.ed').forEach(x=>{if(x.classList.contains('empty'))x.textContent='……………………';x.removeAttribute('class');x.removeAttribute('data-f');x.removeAttribute('data-m')})}
+async function glDocs(){glTpl();const c=$('a4PreviewContainer').cloneNode(true);cleanTpl(c);const h=c.innerHTML;let ok=false;
+ try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([c.textContent],{type:'text/plain'})})]);ok=true}catch(e){
+  try{const d=document.createElement('div');d.innerHTML=h;d.style.cssText='position:fixed;left:-9999px';document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const g=getSelection();g.removeAllRanges();g.addRange(r);ok=document.execCommand('copy');g.removeAllRanges();d.remove()}catch(e2){}}
+ P.rev=1;save();
+ modal(`<h3 class="font-bold text-white mb-2">${ok?'✓ Đã sao chép hồ sơ':'Chưa sao chép tự động được'}</h3>`+(ok?`<p class="text-slate-200 mb-3">Bấm nút dưới để mở Google Docs trống, rồi nhấn <b>Ctrl+V</b> (Mac: ⌘V).</p><a class="gb" style="background:#dc2626;color:#fff;padding:.7rem 1.4rem" target="_blank" rel="noopener" href="https://docs.new">Mở Google Docs trống</a>`:`<p class="text-slate-200 mb-3">Dùng cách này: tải file Word, rồi tải lên Google Drive và mở bằng Google Docs.</p>`)+
+ `<div class="flex flex-wrap gap-2 mt-3"><button class="gb" onclick="glClose();exportToWord()">Tải file Word</button><a class="gb" target="_blank" rel="noopener" href="https://drive.google.com/drive/my-drive">Mở Google Drive</a><button class="gb" onclick="glClose()">Đóng</button></div>`)}
+/* ---- Template mẫu, bấm vào chữ để sửa ---- */
+function glTpl(){const c=gameConfigs[P.type],S=P.type==='SHTT',v=id=>($(id)||{value:''}).value.trim();
+ const e=(id,m)=>{const x=v(id);return `<span class="ed${x?'':' empty'}" data-f="${id}"${m?' data-m="1"':''}>${x?esc(x).replace(/\n/g,'<br>'):'[bấm để nhập]'}</span>`};
+ const kv=(l,id)=>`<p style="margin:4px 0"><b>${l}:</b> ${e(id)}</p>`,ml=(l,id)=>`<p style="margin:10px 0 2px"><b>${l}</b></p><div>${e(id,1)}</div>`,h=t=>`<p style="margin:18px 0 6px;font-size:13pt"><b>${t}</b></p>`;
+ const im=attachedImages.length?attachedImages.map((m,i)=>`<div style="text-align:center;margin:12px 0"><b>[${esc(m.category)}]</b><br><img src="${m.dataUrl}" style="max-width:100%;max-height:260px"><br><i>Hình ${i+1}: ${esc(m.caption||'')}</i></div>`).join('')+'<span class="ed" data-go="6">sửa ảnh</span>':'<i>(Chưa có hình ảnh)</i> <span class="ed" data-go="6">+ Thêm ảnh</span>';
+ $('a4PreviewContainer').innerHTML=`<p style="text-align:center;margin:0"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></p><p style="text-align:center;margin:0 0 14px"><b>Độc lập - Tự do - Hạnh phúc</b></p><p style="text-align:center;font-size:14pt;margin:8px 0"><b>${c.docName}</b></p><p style="text-align:center"><i>Số: ${c.numberPrefix}</i></p>`+
+ h('I. THÔNG TIN CHỦ THỂ QUYỀN / DOANH NGHIỆP')+kv('1. Tên chủ sở hữu / Doanh nghiệp','companyName')+kv('2. Mã số doanh nghiệp / CCCD','taxCode')+`<p style="margin:4px 0"><b>3. Người đại diện / Tác giả:</b> ${e('legalRep')} (${e('repTitle')})</p>`+kv('4. Địa chỉ liên hệ','companyAddress')+kv('5. Số Giấy phép / Số đăng ký liên quan','licenseNumber')+kv('6. Điện thoại & Email liên hệ','contactInfo')+
+ h('II. THÔNG TIN CHI TIẾT TÁC PHẨM / TRÒ CHƠI')+kv('1. Tên tác phẩm / Trò chơi','gameName')+`<p style="margin:4px 0"><b>2. Phân nhóm / Loại hình:</b> ${esc(c.groupText)} <span class="ed" data-go="1">đổi</span></p>`+kv('3. Phân loại độ tuổi / Hình thức','ageRating')+kv('4. Nền tảng phát hành / Công bố','gamePlatforms')+kv('5. Nguồn gốc & Bản quyền','copyrightInfo')+
+ ml('6. Mô tả nội dung / Cốt truyện sáng tạo:','gameStory')+ml('7. Chi tiết cấu trúc kỹ thuật / Gameplay:','gamePlay')+ml('8. Phương án bảo vệ bản quyền & kiểm soát nội dung:','contentControl')+
+ h(S?'III. TÀI LIỆU ĐÍNH KÈM & THÔNG TIN QUYỀN SỞ HỮU':'III. ĐỀ ÁN KỸ THUẬT & HẠ TẦNG MÁY CHỦ')+ml('1. Chi tiết hạ tầng / Danh mục tài liệu:','serverInfo')+ml('2. Phương án bảo mật & an toàn thông tin:','securityPlan')+
+ h(S?'IV. CAM KẾT CỦA TÁC GIẢ & CHỦ SỞ HỮU':'IV. PHƯƠNG ÁN THU PHÍ & VẬN HÀNH')+ml('1. Phương án thương mại hóa / Khai thác:','paymentPlan')+ml('2. Cam kết pháp lý & Nhân sự chịu trách nhiệm:','supportPlan')+
+ h('V. PHỤ LỤC HÌNH ẢNH MINH HỌA & SƠ ĐỒ ĐÍNH KÈM')+im+
+ `<div style="text-align:right;margin-top:30px"><b>ĐẠI DIỆN THEO PHÁP LUẬT / TÁC GIẢ</b><br><i>(Ký, ghi rõ họ tên và đóng dấu)</i><br><br><br><b>${e('legalRep')}</b></div>`}
+$('a4PreviewContainer').addEventListener('click',ev=>{const t=ev.target.closest('.ed');if(!t||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;
+ if(t.dataset.go)return glStep(+t.dataset.go);const src=$(t.dataset.f);if(!src)return;let i;
+ if(src.tagName==='SELECT'){i=document.createElement('select');i.innerHTML=src.innerHTML;i.value=src.value}else{i=document.createElement(t.dataset.m?'textarea':'input');i.value=src.value;if(t.dataset.m)i.rows=Math.max(3,src.value.split('\n').length+1)}
+ i.className='ed';i.style.cssText='width:100%;font:inherit;border:1px solid #ef4444;padding:4px;background:#fff7f7;color:#000';t.replaceWith(i);i.focus();let d=0;
+ const fin=k=>{if(d)return;d=1;if(k){src.value=i.value;glSched()}glTpl()};
+ i.addEventListener('blur',()=>fin(1));i.addEventListener('keydown',k=>{if(k.key==='Escape')fin(0);else if(k.key==='Enter'&&(!t.dataset.m||k.ctrlKey)){k.preventDefault();fin(1)}})});
 /* ---- Hook vào code gốc ---- */
 const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;{const a=$('guideContentArea');a.innerHTML='<details><summary class="cursor-pointer text-red-400 font-semibold mt-4">Xem hướng dẫn nộp chi tiết</summary>'+a.innerHTML+'</details>'}glDocsList();glSched()};
 function glDocsList(){const t=P.type,it=ckItems();
- $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="flex flex-wrap gap-3 mb-4"><button class="gb" style="background:#dc2626;color:#fff;padding:.7rem 1.4rem;font-size:.9rem" onclick="exportToWord()"><i class="fa-solid fa-file-word"></i> Tải file Word</button><button class="gb" style="padding:.7rem 1.4rem;font-size:.9rem" onclick="glDocs()"><i class="fa-brands fa-google-drive"></i> Sang Google Docs</button></div><div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-1"><i class="fa-solid fa-list-check text-emerald-400"></i> Giấy tờ cần chuẩn bị để nộp (${t==='SHTT'?'Bản quyền SHTT':'Game '+t})</h3><p class="text-xs text-slate-400 mb-2">Tham khảo, hãy hỏi lại cơ quan tiếp nhận.</p>`+
+ $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-1"><i class="fa-solid fa-list-check text-emerald-400"></i> Giấy tờ cần chuẩn bị để nộp (${t==='SHTT'?'Bản quyền SHTT':'Game '+t})</h3><p class="text-xs text-slate-400 mb-2">Tham khảo, hãy hỏi lại cơ quan tiếp nhận.</p>`+
  it.map((d,i)=>{const k=t+i;return `<div class="py-1.5 border-b border-slate-800/60"><label title="${esc(d[1])}" class="flex gap-2 text-xs text-slate-200"><input type="checkbox" ${P.checks[k]?'checked':''} onchange="P.checks['${k}']=this.checked;glSched()"><span><b>${esc(d[0])}</b> <span class="${d[3]?'text-rose-300':'text-slate-500'}">[${d[3]?'Bắt buộc':'Nếu có'}]</span></span></label><input class="input-dark text-xs mt-1" style="padding:.3rem .6rem" placeholder="Link file (nếu có)" value="${esc(P.checks[k+'n']||'')}" oninput="P.checks['${k}n']=this.value;glSched()"></div>`}).join('')+'</div>')}
-const _sv=switchView;switchView=function(v){_sv(v);if(v==='preview'&&P&&!P.rev){P.rev=1;glSched()}};
+const _sv=switchView;switchView=function(v){_sv(v);if(v==='preview'&&P){glTpl();if(!P.rev){P.rev=1;glSched()}}};
 const _ri=renderImageGallery;renderImageGallery=function(){_ri();glSched()};
 const _ca=clearAllFields;clearAllFields=function(){_ca();glSched()};
 document.addEventListener('click',e=>{const d=document.querySelector('#glBar details');if(d&&d.open&&(!d.contains(e.target)||e.target.closest('#glBar details div .gb')))d.open=false});
