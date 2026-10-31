@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameLicense Pro VN - Hệ thống lập hồ sơ, SHTT & Hướng dẫn nộp G1-G4</title>
     <script src="https://cdn.tailwindcss.com"></script>
+<script>const _R={50:'#fef2f2',100:'#fee2e2',200:'#fecaca',300:'#fca5a5',400:'#f87171',500:'#ef4444',600:'#dc2626',700:'#b91c1c',800:'#991b1b',900:'#7f1d1d',950:'#450a0a'},_W={50:'#fbf6f6',100:'#f5ebec',200:'#ead9db',300:'#d6c3c5',400:'#b89a9d',500:'#8a5d62',600:'#5c3338',700:'#3d2023',800:'#2a1517',900:'#1c0f10',950:'#14090a'};
+tailwind.config={theme:{extend:{colors:{emerald:_R,blue:_R,indigo:_R,slate:_W}}}}</script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -12,22 +14,22 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0b0f19;
+            background-color: #140a0b;
             color: #e2e8f0;
         }
         .section-card {
-            background-color: #111827;
-            border: 1px solid #1f2937;
+            background-color: #1c0f10;
+            border: 1px solid #2a1517;
             border-radius: 0.75rem;
             overflow: hidden;
             transition: all 0.2s ease;
         }
         .section-card:hover {
-            border-color: #374151;
+            border-color: #4a2a2d;
         }
         .input-dark {
-            background-color: #0f172a;
-            border: 1px solid #1e293b;
+            background-color: #190d0e;
+            border: 1px solid #2a1517;
             color: #f8fafc;
             border-radius: 0.5rem;
             padding: 0.625rem 0.875rem;
@@ -36,8 +38,8 @@
         }
         .input-dark:focus {
             outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+            border-color: #ef4444;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
         }
         .doc-preview-page {
             background-color: #ffffff;
@@ -51,20 +53,25 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
     
-.gb{padding:.4rem .75rem;border-radius:.5rem;font-size:.75rem;font-weight:600;background:#1e293b;color:#e2e8f0;white-space:nowrap}.gb:hover{background:#334155}
-.gl-n{display:inline-flex;width:1.5rem;height:1.5rem;border-radius:9999px;background:#10b981;color:#06281d;font-size:.75rem;align-items:center;justify-content:center;margin-right:.6rem}
-.gst{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;border-radius:.6rem;font-size:.75rem;font-weight:600;white-space:nowrap;border:1px solid #334155;background:#111827;color:#94a3b8}
-.gst b{display:inline-flex;width:1.35rem;height:1.35rem;border-radius:9999px;align-items:center;justify-content:center;background:#334155;color:#e2e8f0}
+.gb{padding:.4rem .75rem;border-radius:.5rem;font-size:.75rem;font-weight:600;background:#2a1517;color:#e2e8f0;white-space:nowrap}.gb:hover{background:#3d2023}
+.gl-n{display:inline-flex;width:1.5rem;height:1.5rem;border-radius:9999px;background:#ef4444;color:#2b0606;font-size:.75rem;align-items:center;justify-content:center;margin-right:.6rem}
+.gst{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;border-radius:.6rem;font-size:.75rem;font-weight:600;white-space:nowrap;border:1px solid #3d2023;background:#1c0f10;color:#94a3b8}
+.gst b{display:inline-flex;width:1.35rem;height:1.35rem;border-radius:9999px;align-items:center;justify-content:center;background:#3d2023;color:#e2e8f0}
 .gst.s1{border-color:#b45309;color:#fcd34d}.gst.s1 b{background:#f59e0b;color:#1c1204}
-.gst.s2{border-color:#047857;color:#6ee7b7}.gst.s2 b{background:#10b981;color:#06281d}
-.glrow{display:flex;gap:.5rem;align-items:center;justify-content:space-between;padding:.6rem .75rem;border:1px solid #1e293b;border-radius:.6rem;background:#0f172a}
+.gst.s2{border-color:#b91c1c;color:#fca5a5}.gst.s2 b{background:#ef4444;color:#2b0606}
+.glrow{display:flex;gap:.5rem;align-items:center;justify-content:space-between;padding:.6rem .75rem;border:1px solid #2a1517;border-radius:.6rem;background:#190d0e}
+
+body{padding-bottom:4.5rem}footer{display:none}[id^="icon-sec"]{display:none}.section-card>button{pointer-events:none}#guideSubtitle{display:none}
+.gl-miss{border-color:#ef4444!important;box-shadow:0 0 0 2px rgba(239,68,68,.35)!important}
+.gst:disabled{opacity:.35}.gst.cur{border-color:#ef4444;color:#fff}
+#glBar details>div .gb{text-align:left}#glBar summary::-webkit-details-marker{display:none}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
     <!-- Top Navigation Bar -->
-    <header class="bg-[#0f172a] border-b border-slate-800 sticky top-0 z-50">
+    <header class="bg-[#190d0e] border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
@@ -72,12 +79,12 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-white text-base leading-tight">GameLicense Pro VN</h1>
-                    <p class="text-xs text-slate-400">Hệ thống lập hồ sơ phát hành, SHTT bản quyền & Hướng dẫn nộp online</p>
+                    
                 </div>
             </div>
 
             <!-- Global Action Buttons -->
-            <div class="flex items-center gap-2.5">
+            <div class="hidden">
                 <button type="button" onclick="switchView('generator')" id="navBtnGen" class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition flex items-center gap-2">
                     <i class="fa-solid fa-pen-to-square"></i> Soạn Thảo Hồ Sơ
                 </button>
@@ -95,7 +102,7 @@
     </header>
 
     <!-- Sub-Navbar cho các loại Giấy tờ / Game (G1, G2, G3, G4 & SHTT) -->
-    <div class="bg-[#0f172a]/80 border-b border-slate-800/80 backdrop-blur">
+    <div class="hidden">
         <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2">
             <button type="button" onclick="switchGameTab('G1')" id="tabBtnG1" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-emerald-600 text-white flex items-center gap-2 shrink-0 shadow">
                 <i class="fa-solid fa-server"></i> Game G1
@@ -116,28 +123,33 @@
     </div>
 
     
-<div id="glBar" class="bg-[#0b1220] border-b border-slate-800"><div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
+<div id="glBar" class="bg-[#160b0c] border-b border-slate-800"><div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
  <div class="flex flex-wrap items-center gap-2">
   <i class="fa-solid fa-folder-open text-emerald-400"></i>
   <input id="glName" class="input-dark text-sm" style="width:16rem" placeholder="Tên hồ sơ (VD: Game X - G1)" oninput="glSched()">
   <span id="glStat" class="text-xs text-slate-400"></span>
   <button id="glReauth" class="gb hidden" style="background:#b45309" onclick="glReauth()">Cấp quyền ghi file</button>
-  <div class="ml-auto flex flex-wrap gap-2">
+  <details class="ml-auto relative"><summary class="gb cursor-pointer list-none">⋯ Menu</summary><div class="absolute right-0 mt-2 z-50 w-56 bg-slate-900 border border-slate-700 rounded-lg p-2 flex flex-col gap-1">
    <button class="gb" onclick="glList()"><i class="fa-solid fa-layer-group"></i> Hồ sơ & phiên bản</button>
    <button class="gb" onclick="document.getElementById('glOpen').click()"><i class="fa-solid fa-folder-open"></i> Mở file</button>
    <button class="gb" onclick="glQuick('')"><i class="fa-solid fa-bolt"></i> Chèn nhanh</button>
    <button class="gb" onclick="glLink()"><i class="fa-solid fa-link"></i> Liên kết file (Drive)</button>
    <button class="gb" onclick="glExport()"><i class="fa-solid fa-download"></i> Sao lưu .json</button>
-   <button class="gb" style="background:#1d4ed8" onclick="glDocs()"><i class="fa-brands fa-google-drive"></i> Sang Google Docs</button>
+   <button class="gb" style="background:#b91c1c" onclick="glDocs()"><i class="fa-brands fa-google-drive"></i> Sang Google Docs</button>
    <input type="file" id="glOpen" class="hidden" accept=".json,.docx,.txt,.md,.html,.htm" onchange="glFile(this)">
-  </div></div>
+  </div></details></div>
  <div id="glSteps" class="flex gap-2 overflow-x-auto pb-1"></div>
  <div class="h-1.5 bg-slate-800 rounded"><div id="glProg" class="h-1.5 bg-emerald-500 rounded transition-all" style="width:0"></div></div>
 </div></div>
 <div id="glModal" class="hidden fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onclick="if(event.target===this)glClose()"><div id="glBox" class="bg-slate-900 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-auto p-5 text-sm"></div></div>
+<div id="glNav" class="fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur border-t border-slate-800"><div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+ <button id="glBackB" class="gb" style="padding:.6rem 1.2rem;font-size:.85rem" onclick="glBack()">← Quay lại</button>
+ <span id="glNavT" class="text-xs text-slate-400 flex-1 text-center"></span>
+ <button id="glNextB" class="gb" style="background:#dc2626;color:#fff;padding:.6rem 1.6rem;font-size:.9rem" onclick="glNext()">Tiếp theo →</button>
+</div></div>
 <div id="glToast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg"></div>
 <!-- Main Container -->
-    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-1">
+    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-1"><div id="glS1" class="hidden"></div>
 
         <!-- VIEW 1: SOẠN THẢO HỒ SƠ (GENERATOR) -->
         <div id="mainViewGenerator" class="space-y-6">
@@ -162,7 +174,7 @@
                 </button>
                 <div id="sec1" class="p-6 space-y-4 border-t border-slate-800/80">
 <div id="glCo" class="rounded-lg border border-slate-700 bg-slate-800/50 p-4 text-xs space-y-3">
- <div class="font-semibold text-white"><i class="fa-solid fa-building-circle-check text-emerald-400"></i> Bạn đã có công ty / pháp nhân để đứng tên phát hành chưa?</div>
+ <div class="font-semibold text-white"><i class="fa-solid fa-building-circle-check text-emerald-400"></i> Bạn đã có công ty chưa?</div>
  <div class="flex gap-2"><button type="button" class="gb" id="coY" onclick="glCo('y')">Đã có công ty</button><button type="button" class="gb" id="coN" onclick="glCo('n')">Chưa có công ty</button></div>
  <div id="coBox" class="hidden space-y-3"></div>
 </div>
@@ -372,9 +384,9 @@
         <!-- VIEW 2: XEM TRƯỚC VĂN BẢN (PREVIEW) -->
         <div id="mainViewPreview" class="hidden">
             <div class="mb-4 flex items-center justify-between bg-slate-900 border border-slate-800 px-4 py-3 rounded-xl">
-                <span class="text-sm text-slate-300"><i class="fa-solid fa-eye text-emerald-400 mr-2"></i>Chế độ xem trước bản in chuẩn hành chính khổ A4</span>
+                <span class="text-sm text-slate-300"><i class="fa-solid fa-eye text-emerald-400 mr-2"></i>Xem trước bản in (A4)</span>
                 <button type="button" onclick="exportToWord()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
-                    <i class="fa-solid fa-download mr-1"></i> Tải về file .DOCX
+                    <i class="fa-solid fa-download mr-1"></i> Tải file Word</button><button type="button" onclick="glDocs()" class="ml-2 px-4 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-white hover:bg-slate-600"><i class="fa-brands fa-google-drive mr-1"></i> Google Docs
                 </button>
             </div>
             <div id="a4PreviewContainer" class="doc-preview-page">
@@ -1333,7 +1345,7 @@ async function glLink(){if(!window.showSaveFilePicker)return alert('Trình duy�
  await save();toast('Đã liên kết. Mẹo: chọn file nằm trong thư mục Google Drive for Desktop để tự đồng bộ lên Drive.')}catch(e){}}
 function glExport(){collect();saveAs(new Blob([JSON.stringify(pack())],{type:'application/json'}),'GL_'+(P.name||'hoso').replace(/[^\w\u00C0-\u1EF9]+/g,'_')+'.json')}
 function loadP(p){P=p;localStorage.setItem('gl_last',p.id);FIELDS().forEach(e=>{if(p.f[e.id]!==undefined)e.value=p.f[e.id];else if(e.tagName!=='SELECT')e.value=''});
- attachedImages=p.img||[];renderImageGallery();$('glName').value=p.name||'';switchGameTab(p.type||'G1');glCoRender();refresh();st(p.h?'Đã mở (file liên kết: '+p.h.name+')':'Đã mở hồ sơ')}
+ attachedImages=p.img||[];renderImageGallery();$('glName').value=p.name||'';switchGameTab(p.type||'G1');glCoRender();go(p.cur||(p.ok?2:1));st(p.h?'Đã mở (file liên kết: '+p.h.name+')':'Đã mở hồ sơ')}
 async function glOpenP(id){await save();loadP((await dbAll()).find(p=>p.id===id));glClose()}
 async function glNew(){await save();const p=newP();await dbPut(p);loadP(p);glClose();glWiz()}
 async function glDup(id){const p={...(await dbAll()).find(x=>x.id===id),id:'p'+Date.now(),h:undefined,vers:[]};p.name+=' (bản sao)';await dbPut(p);glList()}
@@ -1380,29 +1392,35 @@ function refresh(){if(!P)return;let done=0;const S=[],lab=[];
  S[5]=attachedImages.length?2:0;lab[5]=attachedImages.length+' ảnh';S[6]=P.rev?2:0;
  const al=ckItems().map((d,i)=>[d,i]).filter(x=>x[0][3]),c=al.filter(x=>P.checks[P.type+x[1]]).length;S[7]=al.length&&c===al.length?2:c?1:0;lab[7]=c+'/'+al.length+' bắt buộc';
  S.forEach(v=>done+=v==2?1:v==1?.5:0);
- $('glSteps').innerHTML=STEPS.map((n,i)=>`<button class="gst s${S[i]}" onclick="glStep(${i+1})"><b>${S[i]==2?'✓':i+1}</b>${n}${lab[i]?` <span class="opacity-70">${lab[i]}</span>`:''}</button>`).join('');
+ $('glSteps').innerHTML=STEPS.map((n,i)=>`<button class="gst s${S[i]}${i+1===P.cur?' cur':''}" ${i+1>(P.max||(P.ok?8:1))?'disabled':''} onclick="glStep(${i+1})"><b>${S[i]==2?'✓':i+1}</b>${i+1===P.cur?n:''}</button>`).join('');
  $('glProg').style.width=Math.round(done/8*100)+'%'}
-function glStep(i){if(i==1)return glWiz();if(i==7)return switchView('preview');if(i==8)return switchView('guide');
- switchView('generator');const id='sec'+(i-1),el=$(id);if(el.classList.contains('hidden'))toggleAccordion(id);el.parentElement.scrollIntoView({behavior:'smooth',block:'start'})}
-function glWiz(){const c=t=>`<button data-t="${t}" onclick="glPick('${t}')" class="wz text-left p-3 rounded-lg border border-slate-700 hover:border-emerald-500 bg-slate-800/60 w-full"><b class="text-white">${t==='SHTT'?'Bản quyền SHTT (Copyright)':'Game '+t}</b><div class="text-xs text-slate-400">${gameConfigs[t].groupText}</div></button>`;
- modal(`<h3 class="font-bold text-white mb-1">Bước 1: Chọn loại hồ sơ cần làm</h3><p class="text-xs text-slate-400 mb-3">Trả lời nhanh để hệ thống gợi ý (theo định nghĩa G1–G4 đang dùng trong công cụ này; hãy đối chiếu quy định hiện hành khi nộp).</p><div class="flex flex-wrap gap-4 text-xs mb-2 text-slate-200"><label><input type="checkbox" id="wq1" onchange="glRec()"> Có kết nối máy chủ</label><label><input type="checkbox" id="wq2" onchange="glRec()"> Người chơi tương tác với nhau</label></div><p id="wrec" class="text-xs text-emerald-400 mb-3"></p><div class="space-y-2">${['G1','G2','G3','G4','SHTT'].map(c).join('')}</div>`);glRec()}
-function glRec(){const a=$('wq1').checked,b=$('wq2').checked,t=a?(b?'G1':'G2'):(b?'G3':'G4');$('wrec').textContent='Gợi ý: Game '+t;document.querySelectorAll('.wz').forEach(x=>x.style.boxShadow=x.dataset.t===t?'0 0 0 2px #10b981':'none')}
-function glPick(t){P.ok=1;P.type=t;switchGameTab(t);glClose();save()}
+function glStep(i){if(i<=(P.max||(P.ok?8:1)))go(i)}
+function glWiz(){go(1)}
+function glPick(t){P.ok=1;P.type=t;switchGameTab(t);s1render();save()}
+function s1render(){const L=[['G1','Game online','Nhiều người chơi qua máy chủ'],['G2','Game online','Chơi với máy chủ, không tương tác nhau'],['G3','Nhiều người chơi','Không qua máy chủ'],['G4','Game offline','Tải về máy'],['SHTT','Bản quyền','Đăng ký quyền tác giả']];
+ $('glS1').innerHTML='<h2 class="text-xl font-bold text-white mb-4">Bạn muốn làm hồ sơ nào?</h2><div class="grid grid-cols-2 md:grid-cols-5 gap-3">'+L.map(([t,a,b])=>`<button type="button" onclick="glPick('${t}')" class="text-left p-4 rounded-xl border ${P.ok&&P.type===t?'border-red-500 bg-red-950/40':'border-slate-700 bg-slate-900 hover:border-red-500'}"><div class="text-2xl font-extrabold text-red-400">${t==='SHTT'?'©':t}</div><div class="text-white font-semibold text-sm mt-1">${a}</div><div class="text-xs text-slate-400">${b}</div></button>`).join('')+'</div>'}
+let glWarn=0;
+const reqEls=id=>[...document.querySelectorAll('#'+id+' input,#'+id+' textarea,#'+id+' select')].filter(x=>x.id!=='gameGroupInput'&&(x.parentElement.querySelector('label')||{textContent:''}).textContent.includes('*'));
+function go(i){P.cur=i;P.max=Math.max(P.max||(P.ok?8:1),i);const g=$('mainViewGenerator');
+ $('glS1').classList.toggle('hidden',i!==1);
+ if(i===1){['mainViewGenerator','mainViewPreview','mainViewGuide'].forEach(x=>$(x).classList.add('hidden'));s1render()}
+ else if(i<=6){switchView('generator');[...g.children].forEach((c,k)=>c.style.display=k===i-1?'':'none');$('sec'+(i-1)).classList.remove('hidden')}
+ else switchView(i===7?'preview':'guide');
+ $('glBackB').style.visibility=i>1?'visible':'hidden';$('glNavT').textContent='Bước '+i+'/8 · '+STEPS[i-1];$('glNextB').textContent=i===8?'Tải file Word':'Tiếp theo →';
+ refresh();scrollTo(0,0);glSched()}
+function glNext(){const c=P.cur;
+ if(c===1&&!P.ok)return toast('Hãy chọn một loại hồ sơ');
+ if(c>=2&&c<=5){const m=reqEls('sec'+(c-1)).filter(e=>!e.value.trim());if(m.length&&glWarn!==c){m.forEach(e=>e.classList.add('gl-miss'));glWarn=c;return toast('Còn thiếu '+m.length+' mục (viền đỏ). Bấm Tiếp theo lần nữa để bỏ qua.')}}
+ glWarn=0;if(c===8)return exportToWord();go(c+1)}
+function glBack(){if(P.cur>1)go(P.cur-1)}
 const DST_EMAIL='dinhgiahuycm@gmail.com';/* Điền email nhận của Dream Studio Team VN, ví dụ 'lienhe@...' */
 function glCo(v){P.co=v;glCoRender();glSched()}
-function glCoRender(){if(!P)return;const n=P.co==='n';$('coY').style.background=P.co==='y'?'#059669':'';$('coN').style.background=n?'#b45309':'';const b=$('coBox');b.classList.toggle('hidden',!n);if(!n)return;
- b.innerHTML=`<p class="text-slate-200"><b>Bạn đã lập công ty chưa?</b> Hồ sơ phát hành game G1–G4 thường cần doanh nghiệp đứng tên (đăng ký bản quyền SHTT thì tác giả cá nhân vẫn làm được; hãy xác nhận với cơ quan tiếp nhận). Chi phí thuê luật sư lập doanh nghiệp tham khảo dao động <b class="text-amber-300">4–6 triệu đồng</b>, tùy gói dịch vụ.</p>
- <div class="border-t border-slate-700 pt-3 space-y-2"><p class="text-slate-200"><b>Bạn có cần Dream Studio Team VN hỗ trợ làm pháp nhân phát hành game không?</b></p>
- <label class="flex gap-2 text-slate-200"><input type="checkbox" ${P.cb?'checked':''} onchange="P.cb=this.checked;glSched()"> Tôi đã có giấy chứng nhận bản quyền (SHTT) của game</label>
- <p class="text-emerald-300">Nếu đã có giấy bản quyền, bạn có thể nhờ Dream Studio Team VN đứng ra phát hành.</p>
- <div class="rounded-lg border border-emerald-800/60 bg-emerald-950/30 p-3 text-slate-200 space-y-0.5">
-  <div class="font-bold text-white">DREAM STUDIO TEAM VN CO., LTD</div>
-  <div>Mã số thuế: 1900702194 · Loại hình: Công ty TNHH ngoài nhà nước · Hoạt động từ 15/07/2025</div>
-  <div>Trụ sở: Số 257, Ấp 8, Xã Phong Thạnh, Tỉnh Cà Mau</div>
-  <div>Người đại diện pháp luật: DINH GIA HUY · Điện thoại: 0836253400</div>
-  <div class="text-slate-400">Hợp tác phát hành sản phẩm, hỗ trợ nộp hồ sơ và tư vấn: liên hệ trực tiếp qua email dinhgiahuycm@gmail.com</div>
- </div>
- <button type="button" class="gb" style="background:#059669" onclick="glMail()"><i class="fa-solid fa-envelope"></i> Gửi email liên hệ Dream Studio Team VN</button></div>`}
+function glCoRender(){if(!P)return;const n=P.co==='n';$('coY').style.background=P.co==='y'?'#dc2626':'';$('coN').style.background=n?'#dc2626':'';const b=$('coBox');b.classList.toggle('hidden',!n);if(!n)return;
+ b.innerHTML=`<p class="text-slate-200">Lập công ty qua luật sư: khoảng <b class="text-red-400">4–6 triệu đồng</b>.</p>
+ <div class="border-t border-slate-700 pt-3 space-y-2"><p class="text-white font-semibold">Cần Dream Studio Team VN hỗ trợ làm pháp nhân phát hành game?</p>
+ <label class="flex gap-2 text-slate-200"><input type="checkbox" ${P.cb?'checked':''} onchange="P.cb=this.checked;glSched()"> Tôi đã có giấy bản quyền (có thể nhờ phát hành)</label>
+ <div class="text-slate-400">DREAM STUDIO TEAM VN CO., LTD · MST 1900702194 · 0836253400 · ${DST_EMAIL}</div>
+ <button type="button" class="gb" style="background:#dc2626;color:#fff" onclick="glMail()">Gửi email liên hệ</button></div>`}
 function glMail(){collect();const b=`Xin chào Dream Studio Team VN,\n\nTôi muốn nhờ hỗ trợ pháp nhân phát hành game.\n- Tên game: ${P.f.gameName||'(chưa nhập)'}\n- Loại hồ sơ: ${P.type}\n- Tình trạng công ty: chưa có\n- Giấy chứng nhận bản quyền: ${P.cb?'Đã có':'Chưa có'}\n- Người liên hệ: ${P.f.legalRep||''} ${P.f.contactInfo||''}\n\nXin cảm ơn.`;
  navigator.clipboard&&navigator.clipboard.writeText(b).catch(()=>{});
  location.href='mailto:'+DST_EMAIL+'?subject='+encodeURIComponent('Đề nghị hỗ trợ pháp nhân phát hành game - '+(P.f.gameName||P.name||''))+'&body='+encodeURIComponent(b);
@@ -1423,7 +1441,7 @@ async function glFile(inp){const f=inp.files[0];inp.value='';if(!f)return;const 
  const m=parseDoc(txt),n=Object.keys(m).length;
  if(n>=3&&confirm('Nhận diện được '+n+' mục theo mẫu file Word do công cụ này xuất. Nạp vào hồ sơ đang mở? (Bấm Hủy để chèn thủ công từng đoạn)')){Object.entries(m).forEach(([k,v])=>{if($(k))$(k).value=v});glSched();return toast('Đã nạp '+n+' mục')}
  glQuick(txt)}catch(e){alert('Không mở được file: '+e.message)}}
-function glQuick(txt){modal(`<h3 class="font-bold text-white mb-2">Chèn nhanh nội dung có sẵn</h3><p class="text-xs text-slate-400 mb-2">Dán hoặc mở file vào ô dưới, bôi đen đoạn cần lấy (không bôi đen = lấy toàn bộ), chọn ô đích rồi bấm Chèn. Có thể chèn nhiều lần.</p><textarea id="qTxt" rows="9" class="input-dark text-xs">${esc(txt)}</textarea><div class="flex flex-wrap gap-2 mt-3 items-center"><select id="qTo" class="input-dark text-xs" style="width:auto;max-width:20rem">${FIELDS().filter(e=>e.tagName!=='SELECT').map(e=>`<option value="${e.id}">${esc((e.parentElement.querySelector('label')||{textContent:e.id}).textContent.replace('*','').trim())}</option>`).join('')}</select><select id="qMode" class="input-dark text-xs" style="width:auto"><option value="a">Chèn thêm vào cuối</option><option value="r">Thay thế</option></select><button class="gb" style="background:#059669" onclick="glIns()">Chèn</button><button class="gb" onclick="glClose()">Đóng</button></div>`)}
+function glQuick(txt){modal(`<h3 class="font-bold text-white mb-2">Chèn nhanh nội dung có sẵn</h3><p class="text-xs text-slate-400 mb-2">Dán hoặc mở file vào ô dưới, bôi đen đoạn cần lấy (không bôi đen = lấy toàn bộ), chọn ô đích rồi bấm Chèn. Có thể chèn nhiều lần.</p><textarea id="qTxt" rows="9" class="input-dark text-xs">${esc(txt)}</textarea><div class="flex flex-wrap gap-2 mt-3 items-center"><select id="qTo" class="input-dark text-xs" style="width:auto;max-width:20rem">${FIELDS().filter(e=>e.tagName!=='SELECT').map(e=>`<option value="${e.id}">${esc((e.parentElement.querySelector('label')||{textContent:e.id}).textContent.replace('*','').trim())}</option>`).join('')}</select><select id="qMode" class="input-dark text-xs" style="width:auto"><option value="a">Chèn thêm vào cuối</option><option value="r">Thay thế</option></select><button class="gb" style="background:#dc2626" onclick="glIns()">Chèn</button><button class="gb" onclick="glClose()">Đóng</button></div>`)}
 function glIns(){const t=$('qTxt'),s=t.selectionStart!==t.selectionEnd?t.value.slice(t.selectionStart,t.selectionEnd):t.value,el=$($('qTo').value);if(!s.trim())return;
  el.value=$('qMode').value==='r'||!el.value?s.trim():el.value+'\n'+s.trim();glSched();toast('Đã chèn vào: '+$('qTo').selectedOptions[0].text)}
 /* ---- Google Docs ---- */
@@ -1432,14 +1450,15 @@ async function glDocs(){renderDocumentPreview();const h=$('a4PreviewContainer').
   const d=document.createElement('div');d.innerHTML=h;d.style.cssText='position:fixed;left:-9999px';document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();d.remove()}
  P.rev=1;save();if(ok){toast('Đã sao chép hồ sơ. Trong Google Docs nhấn Ctrl+V để dán.');window.open('https://docs.new','_blank')}else alert('Không sao chép được. Hãy dùng "Xuất File Word" rồi tải lên Google Drive.')}
 /* ---- Hook vào code gốc ---- */
-const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;glDocsList();glSched()};
+const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;{const a=$('guideContentArea');a.innerHTML='<details><summary class="cursor-pointer text-red-400 font-semibold mt-4">Xem hướng dẫn nộp chi tiết</summary>'+a.innerHTML+'</details>'}glDocsList();glSched()};
 function glDocsList(){const t=P.type,it=ckItems();
- $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-1"><i class="fa-solid fa-list-check text-emerald-400"></i> Giấy tờ cần chuẩn bị để nộp (${t==='SHTT'?'Bản quyền SHTT':'Game '+t})</h3><p class="text-xs text-slate-400 mb-2">Danh mục tham khảo. Hãy đối chiếu quy định hiện hành và hướng dẫn của cơ quan tiếp nhận trước khi nộp. Tích khi đã có, ghi chú nơi lưu file (link Drive...).</p>`+
- it.map((d,i)=>{const k=t+i;return `<div class="py-1.5 border-b border-slate-800/60"><label class="flex gap-2 text-xs text-slate-200"><input type="checkbox" ${P.checks[k]?'checked':''} onchange="P.checks['${k}']=this.checked;glSched()"><span><b>${esc(d[0])}</b> <span class="${d[3]?'text-rose-300':'text-slate-500'}">[${d[3]?'Bắt buộc':'Nếu có'}]</span><br><span class="text-slate-400">${esc(d[1])}</span></span></label><input class="input-dark text-xs mt-1" style="padding:.3rem .6rem" placeholder="Ghi chú / link file" value="${esc(P.checks[k+'n']||'')}" oninput="P.checks['${k}n']=this.value;glSched()"></div>`}).join('')+'</div>')}
+ $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="flex flex-wrap gap-3 mb-4"><button class="gb" style="background:#dc2626;color:#fff;padding:.7rem 1.4rem;font-size:.9rem" onclick="exportToWord()"><i class="fa-solid fa-file-word"></i> Tải file Word</button><button class="gb" style="padding:.7rem 1.4rem;font-size:.9rem" onclick="glDocs()"><i class="fa-brands fa-google-drive"></i> Sang Google Docs</button></div><div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-1"><i class="fa-solid fa-list-check text-emerald-400"></i> Giấy tờ cần chuẩn bị để nộp (${t==='SHTT'?'Bản quyền SHTT':'Game '+t})</h3><p class="text-xs text-slate-400 mb-2">Tham khảo, hãy hỏi lại cơ quan tiếp nhận.</p>`+
+ it.map((d,i)=>{const k=t+i;return `<div class="py-1.5 border-b border-slate-800/60"><label title="${esc(d[1])}" class="flex gap-2 text-xs text-slate-200"><input type="checkbox" ${P.checks[k]?'checked':''} onchange="P.checks['${k}']=this.checked;glSched()"><span><b>${esc(d[0])}</b> <span class="${d[3]?'text-rose-300':'text-slate-500'}">[${d[3]?'Bắt buộc':'Nếu có'}]</span></span></label><input class="input-dark text-xs mt-1" style="padding:.3rem .6rem" placeholder="Link file (nếu có)" value="${esc(P.checks[k+'n']||'')}" oninput="P.checks['${k}n']=this.value;glSched()"></div>`}).join('')+'</div>')}
 const _sv=switchView;switchView=function(v){_sv(v);if(v==='preview'&&P&&!P.rev){P.rev=1;glSched()}};
 const _ri=renderImageGallery;renderImageGallery=function(){_ri();glSched()};
 const _ca=clearAllFields;clearAllFields=function(){_ca();glSched()};
-document.addEventListener('input',e=>{if(e.target.closest('#sec1,#sec2,#sec3,#sec4'))glSched()});
+document.addEventListener('click',e=>{const d=document.querySelector('#glBar details');if(d&&d.open&&(!d.contains(e.target)||e.target.closest('#glBar details div .gb')))d.open=false});
+document.addEventListener('input',e=>{e.target.classList&&e.target.classList.remove('gl-miss');if(e.target.closest('#sec1,#sec2,#sec3,#sec4'))glSched()});
 document.addEventListener('change',e=>{if(e.target.closest('#sec2'))glSched()});
 addEventListener('visibilitychange',()=>{if(document.hidden)save()});
 for(let n=1;n<=5;n++)$('sec'+n).previousElementSibling.querySelector('span').insertAdjacentHTML('afterbegin','<b class="gl-n">'+(n+1)+'</b>');
