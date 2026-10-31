@@ -161,6 +161,11 @@
                     <i id="icon-sec1" class="fa-solid fa-chevron-up text-slate-400 transition-transform"></i>
                 </button>
                 <div id="sec1" class="p-6 space-y-4 border-t border-slate-800/80">
+<div id="glCo" class="rounded-lg border border-slate-700 bg-slate-800/50 p-4 text-xs space-y-3">
+ <div class="font-semibold text-white"><i class="fa-solid fa-building-circle-check text-emerald-400"></i> Bạn đã có công ty / pháp nhân để đứng tên phát hành chưa?</div>
+ <div class="flex gap-2"><button type="button" class="gb" id="coY" onclick="glCo('y')">Đã có công ty</button><button type="button" class="gb" id="coN" onclick="glCo('n')">Chưa có công ty</button></div>
+ <div id="coBox" class="hidden space-y-3"></div>
+</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1.5">Tên chủ sở hữu / Doanh nghiệp *</label>
@@ -1312,7 +1317,7 @@ const st=m=>$('glStat').textContent=m;
 function toast(m){const t=$('glToast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),3500)}
 function modal(h){$('glBox').innerHTML=h;$('glModal').classList.remove('hidden')}
 function glClose(){$('glModal').classList.add('hidden')}
-const pack=()=>({gl:1,name:P.name,type:P.type,f:P.f,img:P.img,checks:P.checks,t:P.t});
+const pack=()=>({gl:1,name:P.name,type:P.type,f:P.f,img:P.img,checks:P.checks,co:P.co,cb:P.cb,t:P.t});
 function collect(){P.f={};FIELDS().forEach(e=>P.f[e.id]=e.value);P.img=attachedImages;P.name=$('glName').value.trim()}
 function glSched(){clearTimeout(glT);st('Đang chỉnh sửa…');glT=setTimeout(save,700);refresh()}
 async function save(){if(!P)return;collect();const n=Date.now();P.t=n;
@@ -1328,7 +1333,7 @@ async function glLink(){if(!window.showSaveFilePicker)return alert('Trình duy�
  await save();toast('Đã liên kết. Mẹo: chọn file nằm trong thư mục Google Drive for Desktop để tự đồng bộ lên Drive.')}catch(e){}}
 function glExport(){collect();saveAs(new Blob([JSON.stringify(pack())],{type:'application/json'}),'GL_'+(P.name||'hoso').replace(/[^\w\u00C0-\u1EF9]+/g,'_')+'.json')}
 function loadP(p){P=p;localStorage.setItem('gl_last',p.id);FIELDS().forEach(e=>{if(p.f[e.id]!==undefined)e.value=p.f[e.id];else if(e.tagName!=='SELECT')e.value=''});
- attachedImages=p.img||[];renderImageGallery();$('glName').value=p.name||'';switchGameTab(p.type||'G1');refresh();st(p.h?'Đã mở (file liên kết: '+p.h.name+')':'Đã mở hồ sơ')}
+ attachedImages=p.img||[];renderImageGallery();$('glName').value=p.name||'';switchGameTab(p.type||'G1');glCoRender();refresh();st(p.h?'Đã mở (file liên kết: '+p.h.name+')':'Đã mở hồ sơ')}
 async function glOpenP(id){await save();loadP((await dbAll()).find(p=>p.id===id));glClose()}
 async function glNew(){await save();const p=newP();await dbPut(p);loadP(p);glClose();glWiz()}
 async function glDup(id){const p={...(await dbAll()).find(x=>x.id===id),id:'p'+Date.now(),h:undefined,vers:[]};p.name+=' (bản sao)';await dbPut(p);glList()}
@@ -1342,11 +1347,38 @@ async function glMark(){const l=prompt('Tên mốc (VD: Bản gửi duyệt lầ
 async function glRestore(i){if(!confirm('Khôi phục phiên bản này? Bản hiện tại sẽ được giữ lại trong danh sách phiên bản.'))return;collect();P.vers.unshift({t:Date.now(),label:'Trước khi khôi phục',f:{...P.f}});P.f={...P.vers[i+1].f};await dbPut(P);loadP(P);glClose();save()}
 /* ---- Quy trình ---- */
 function secProg(id){const e=[...document.querySelectorAll('#'+id+' input,#'+id+' textarea,#'+id+' select')].filter(x=>x.id!=='gameGroupInput'&&(x.parentElement.querySelector('label')||{textContent:''}).textContent.includes('*'));return[e.filter(x=>x.value.trim()).length,e.length]}
-function ckItems(){return[...new DOMParser().parseFromString(gameConfigs[P.type].guideHtml,'text/html').querySelectorAll('ol li')].map(l=>l.textContent.trim())}
+const ALL='G1 G2 G3 G4 SHTT',GG='G1 G2 G3 G4';
+const DOCS=[
+['Đơn / văn bản đề nghị (xuất từ công cụ này)','Nút "Xuất File Word", ký tên và đóng dấu',ALL,1],
+['Bản sao Giấy chứng nhận đăng ký doanh nghiệp (ngành nghề phù hợp)','Doanh nghiệp đứng tên phát hành',GG,1],
+['CCCD / hộ chiếu của người đại diện pháp luật hoặc tác giả','Bản sao công chứng hoặc bản chụp rõ nét',ALL,1],
+['Giấy ủy quyền','Chỉ cần nếu người nộp không phải đại diện pháp luật',ALL,0],
+['Giấy tờ chứng minh quyền sở hữu / sử dụng hợp pháp game','Hợp đồng bản quyền, hợp đồng với studio phát triển, giấy chứng nhận quyền tác giả',GG,1],
+['Kịch bản, mô tả nội dung và cơ chế chơi','Phần II của công cụ',GG,1],
+['Bảng phân loại độ tuổi và tự đánh giá nội dung','Bạo lực, tình dục, cờ bạc, nội dung nhạy cảm...',GG,1],
+['Cam kết tuân thủ pháp luật, không chứa nội dung vi phạm','Có chữ ký người đại diện',GG,1],
+['Ảnh chụp màn hình, sơ đồ kiến trúc, bản build / link thử nghiệm','Phần V của công cụ',GG,1],
+['Đề án kỹ thuật và hạ tầng','Phần III của công cụ',"G1 G2 G3",1],
+['Hợp đồng thuê máy chủ / hạ tầng, địa điểm đặt máy chủ','Nhà cung cấp datacenter / cloud',"G1 G2",1],
+['Giấy chứng nhận đăng ký tên miền','Tên miền dùng để cung cấp dịch vụ',"G1 G2",1],
+['Phương án thanh toán, thu phí và quản lý tài khoản người chơi','Phần IV của công cụ',"G1 G2",1],
+['Thỏa thuận / điều khoản cung cấp và sử dụng dịch vụ cho người chơi','Terms of Service',"G1 G2 G3",1],
+['Chính sách bảo mật và quản lý thông tin cá nhân người chơi','Privacy Policy',"G1 G2 G3",1],
+['Hồ sơ nhân sự vận hành, kỹ thuật và bộ phận hỗ trợ khách hàng','Danh sách, vị trí, hợp đồng lao động',"G1",1],
+['Gói cài đặt / bản build và hướng dẫn cài đặt để cơ quan kiểm tra','APK, EXE hoặc link TestFlight',"G3 G4",0],
+['Văn bản của cơ quan quản lý về nội dung, kịch bản (nếu quy định yêu cầu bước trước)','Hãy hỏi cơ quan tiếp nhận về quy trình hiện hành',"G1",0],
+['Tờ khai đăng ký quyền tác giả','Theo mẫu của Cục Bản quyền tác giả',"SHTT",1],
+['Bản sao tác phẩm (mã nguồn, bản build, tài liệu thiết kế game)','Số lượng và định dạng theo hướng dẫn của Cục',"SHTT",1],
+['Cam kết của tác giả và chủ sở hữu','Phần IV của công cụ',"SHTT",1],
+['Văn bản đồng ý của đồng tác giả / chủ sở hữu','Nếu có nhiều người cùng sáng tạo',"SHTT",0],
+['Hợp đồng giao việc, thuê sáng tạo hoặc chuyển nhượng quyền','Nếu tác phẩm tạo ra theo hợp đồng',"SHTT",0],
+['Bản sao Giấy chứng nhận đăng ký doanh nghiệp','Nếu chủ sở hữu là tổ chức',"SHTT",0],
+['Chứng từ nộp phí, lệ phí','Nếu có phát sinh',ALL,0]];
+function ckItems(){return DOCS.filter(d=>d[2].split(' ').includes(P.type))}
 function refresh(){if(!P)return;let done=0;const S=[],lab=[];
  S[0]=P.ok?2:0;for(let i=1;i<=4;i++){const[n,t]=secProg('sec'+i);S[i]=n&&n===t?2:n?1:0;lab[i]=n+'/'+t}
  S[5]=attachedImages.length?2:0;lab[5]=attachedImages.length+' ảnh';S[6]=P.rev?2:0;
- const it=ckItems(),c=it.filter((_,i)=>P.checks[P.type+i]).length;S[7]=it.length&&c===it.length?2:c?1:0;lab[7]=c+'/'+it.length;
+ const al=ckItems().map((d,i)=>[d,i]).filter(x=>x[0][3]),c=al.filter(x=>P.checks[P.type+x[1]]).length;S[7]=al.length&&c===al.length?2:c?1:0;lab[7]=c+'/'+al.length+' bắt buộc';
  S.forEach(v=>done+=v==2?1:v==1?.5:0);
  $('glSteps').innerHTML=STEPS.map((n,i)=>`<button class="gst s${S[i]}" onclick="glStep(${i+1})"><b>${S[i]==2?'✓':i+1}</b>${n}${lab[i]?` <span class="opacity-70">${lab[i]}</span>`:''}</button>`).join('');
  $('glProg').style.width=Math.round(done/8*100)+'%'}
@@ -1356,6 +1388,25 @@ function glWiz(){const c=t=>`<button data-t="${t}" onclick="glPick('${t}')" clas
  modal(`<h3 class="font-bold text-white mb-1">Bước 1: Chọn loại hồ sơ cần làm</h3><p class="text-xs text-slate-400 mb-3">Trả lời nhanh để hệ thống gợi ý (theo định nghĩa G1–G4 đang dùng trong công cụ này; hãy đối chiếu quy định hiện hành khi nộp).</p><div class="flex flex-wrap gap-4 text-xs mb-2 text-slate-200"><label><input type="checkbox" id="wq1" onchange="glRec()"> Có kết nối máy chủ</label><label><input type="checkbox" id="wq2" onchange="glRec()"> Người chơi tương tác với nhau</label></div><p id="wrec" class="text-xs text-emerald-400 mb-3"></p><div class="space-y-2">${['G1','G2','G3','G4','SHTT'].map(c).join('')}</div>`);glRec()}
 function glRec(){const a=$('wq1').checked,b=$('wq2').checked,t=a?(b?'G1':'G2'):(b?'G3':'G4');$('wrec').textContent='Gợi ý: Game '+t;document.querySelectorAll('.wz').forEach(x=>x.style.boxShadow=x.dataset.t===t?'0 0 0 2px #10b981':'none')}
 function glPick(t){P.ok=1;P.type=t;switchGameTab(t);glClose();save()}
+const DST_EMAIL='dinhgiahuycm@gmail.com';/* Điền email nhận của Dream Studio Team VN, ví dụ 'lienhe@...' */
+function glCo(v){P.co=v;glCoRender();glSched()}
+function glCoRender(){if(!P)return;const n=P.co==='n';$('coY').style.background=P.co==='y'?'#059669':'';$('coN').style.background=n?'#b45309':'';const b=$('coBox');b.classList.toggle('hidden',!n);if(!n)return;
+ b.innerHTML=`<p class="text-slate-200"><b>Bạn đã lập công ty chưa?</b> Hồ sơ phát hành game G1–G4 thường cần doanh nghiệp đứng tên (đăng ký bản quyền SHTT thì tác giả cá nhân vẫn làm được; hãy xác nhận với cơ quan tiếp nhận). Chi phí thuê luật sư lập doanh nghiệp tham khảo dao động <b class="text-amber-300">4–6 triệu đồng</b>, tùy gói dịch vụ.</p>
+ <div class="border-t border-slate-700 pt-3 space-y-2"><p class="text-slate-200"><b>Bạn có cần Dream Studio Team VN hỗ trợ làm pháp nhân phát hành game không?</b></p>
+ <label class="flex gap-2 text-slate-200"><input type="checkbox" ${P.cb?'checked':''} onchange="P.cb=this.checked;glSched()"> Tôi đã có giấy chứng nhận bản quyền (SHTT) của game</label>
+ <p class="text-emerald-300">Nếu đã có giấy bản quyền, bạn có thể nhờ Dream Studio Team VN đứng ra phát hành.</p>
+ <div class="rounded-lg border border-emerald-800/60 bg-emerald-950/30 p-3 text-slate-200 space-y-0.5">
+  <div class="font-bold text-white">DREAM STUDIO TEAM VN CO., LTD</div>
+  <div>Mã số thuế: 1900702194 · Loại hình: Công ty TNHH ngoài nhà nước · Hoạt động từ 15/07/2025</div>
+  <div>Trụ sở: Số 257, Ấp 8, Xã Phong Thạnh, Tỉnh Cà Mau</div>
+  <div>Người đại diện pháp luật: DINH GIA HUY · Điện thoại: 0836253400</div>
+  <div class="text-slate-400">Hợp tác phát hành sản phẩm, hỗ trợ nộp hồ sơ và tư vấn: liên hệ trực tiếp qua email dinhgiahuycm@gmail.com</div>
+ </div>
+ <button type="button" class="gb" style="background:#059669" onclick="glMail()"><i class="fa-solid fa-envelope"></i> Gửi email liên hệ Dream Studio Team VN</button></div>`}
+function glMail(){collect();const b=`Xin chào Dream Studio Team VN,\n\nTôi muốn nhờ hỗ trợ pháp nhân phát hành game.\n- Tên game: ${P.f.gameName||'(chưa nhập)'}\n- Loại hồ sơ: ${P.type}\n- Tình trạng công ty: chưa có\n- Giấy chứng nhận bản quyền: ${P.cb?'Đã có':'Chưa có'}\n- Người liên hệ: ${P.f.legalRep||''} ${P.f.contactInfo||''}\n\nXin cảm ơn.`;
+ navigator.clipboard&&navigator.clipboard.writeText(b).catch(()=>{});
+ location.href='mailto:'+DST_EMAIL+'?subject='+encodeURIComponent('Đề nghị hỗ trợ pháp nhân phát hành game - '+(P.f.gameName||P.name||''))+'&body='+encodeURIComponent(b);
+ toast(DST_EMAIL?'Đang mở email tới '+DST_EMAIL:'Chưa cài email nhận: nội dung đã được sao chép, hãy dán vào email gửi Dream Studio Team VN')}
 /* ---- Mở file & chèn nhanh ---- */
 const KV={'Tên chủ sở hữu / Doanh nghiệp':'companyName','Mã số doanh nghiệp / CCCD':'taxCode','Người đại diện / Tác giả':'legalRep','Địa chỉ liên hệ':'companyAddress','Số Giấy phép / Số đăng ký liên quan':'licenseNumber','Điện thoại & Email liên hệ':'contactInfo','Tên tác phẩm / Trò chơi':'gameName','Nền tảng phát hành / Công bố':'gamePlatforms','Nguồn gốc & Bản quyền':'copyrightInfo'};
 const ML={'Mô tả nội dung':'gameStory','Chi tiết cấu trúc':'gamePlay','Phương án bảo vệ':'contentControl','Chi tiết hạ tầng':'serverInfo','Phương án bảo mật':'securityPlan','Phương án thương mại':'paymentPlan','Cam kết pháp lý':'supportPlan'};
@@ -1366,7 +1417,7 @@ function parseDoc(txt){const m={};let cur=null;txt.split(/\r?\n/).map(l=>l.trim(
  if(/^[IVX]+\.\s/.test(l)||/^ĐẠI DIỆN/.test(l)||/^Hình \d/.test(l)){cur=null;return}
  if(cur&&!/^\(Chưa nhập/.test(l))m[cur]+=(m[cur]?'\n':'')+l});return m}
 async function glFile(inp){const f=inp.files[0];inp.value='';if(!f)return;const x=f.name.split('.').pop().toLowerCase();let txt='';
- try{if(x==='json'){const o=JSON.parse(await f.text());if(o.gl!==1)throw Error('Không phải file hồ sơ GameLicense');await save();const p={...newP(),name:o.name||f.name,type:o.type,f:o.f,img:o.img||[],checks:o.checks||{},ok:1};await dbPut(p);loadP(p);return toast('Đã mở hồ sơ từ file')}
+ try{if(x==='json'){const o=JSON.parse(await f.text());if(o.gl!==1)throw Error('Không phải file hồ sơ GameLicense');await save();const p={...newP(),name:o.name||f.name,type:o.type,f:o.f,img:o.img||[],checks:o.checks||{},co:o.co,cb:o.cb,ok:1};await dbPut(p);loadP(p);return toast('Đã mở hồ sơ từ file')}
  if(x==='docx'){if(!window.mammoth)throw Error('Chưa tải được thư viện đọc .docx (cần Internet)');txt=(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value}
  else if(x==='html'||x==='htm')txt=new DOMParser().parseFromString(await f.text(),'text/html').body.textContent;else txt=await f.text();
  const m=parseDoc(txt),n=Object.keys(m).length;
@@ -1381,8 +1432,10 @@ async function glDocs(){renderDocumentPreview();const h=$('a4PreviewContainer').
   const d=document.createElement('div');d.innerHTML=h;d.style.cssText='position:fixed;left:-9999px';document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();d.remove()}
  P.rev=1;save();if(ok){toast('Đã sao chép hồ sơ. Trong Google Docs nhấn Ctrl+V để dán.');window.open('https://docs.new','_blank')}else alert('Không sao chép được. Hãy dùng "Xuất File Word" rồi tải lên Google Drive.')}
 /* ---- Hook vào code gốc ---- */
-const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;const it=ckItems();
- $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Danh mục cần chuẩn bị (tích để theo dõi)</h3>${it.map((x,i)=>`<label class="flex gap-2 text-xs text-slate-200 py-1"><input type="checkbox" ${P.checks[t+i]?'checked':''} onchange="P.checks['${t}${i}']=this.checked;glSched()"> ${esc(x)}</label>`).join('')}</div>`);glSched()};
+const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;glDocsList();glSched()};
+function glDocsList(){const t=P.type,it=ckItems();
+ $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-1"><i class="fa-solid fa-list-check text-emerald-400"></i> Giấy tờ cần chuẩn bị để nộp (${t==='SHTT'?'Bản quyền SHTT':'Game '+t})</h3><p class="text-xs text-slate-400 mb-2">Danh mục tham khảo. Hãy đối chiếu quy định hiện hành và hướng dẫn của cơ quan tiếp nhận trước khi nộp. Tích khi đã có, ghi chú nơi lưu file (link Drive...).</p>`+
+ it.map((d,i)=>{const k=t+i;return `<div class="py-1.5 border-b border-slate-800/60"><label class="flex gap-2 text-xs text-slate-200"><input type="checkbox" ${P.checks[k]?'checked':''} onchange="P.checks['${k}']=this.checked;glSched()"><span><b>${esc(d[0])}</b> <span class="${d[3]?'text-rose-300':'text-slate-500'}">[${d[3]?'Bắt buộc':'Nếu có'}]</span><br><span class="text-slate-400">${esc(d[1])}</span></span></label><input class="input-dark text-xs mt-1" style="padding:.3rem .6rem" placeholder="Ghi chú / link file" value="${esc(P.checks[k+'n']||'')}" oninput="P.checks['${k}n']=this.value;glSched()"></div>`}).join('')+'</div>')}
 const _sv=switchView;switchView=function(v){_sv(v);if(v==='preview'&&P&&!P.rev){P.rev=1;glSched()}};
 const _ri=renderImageGallery;renderImageGallery=function(){_ri();glSched()};
 const _ca=clearAllFields;clearAllFields=function(){_ca();glSched()};
