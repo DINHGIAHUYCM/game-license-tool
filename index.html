@@ -50,7 +50,16 @@
             margin: 0 auto;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
-    </style>
+    
+.gb{padding:.4rem .75rem;border-radius:.5rem;font-size:.75rem;font-weight:600;background:#1e293b;color:#e2e8f0;white-space:nowrap}.gb:hover{background:#334155}
+.gl-n{display:inline-flex;width:1.5rem;height:1.5rem;border-radius:9999px;background:#10b981;color:#06281d;font-size:.75rem;align-items:center;justify-content:center;margin-right:.6rem}
+.gst{display:flex;align-items:center;gap:.5rem;padding:.4rem .75rem;border-radius:.6rem;font-size:.75rem;font-weight:600;white-space:nowrap;border:1px solid #334155;background:#111827;color:#94a3b8}
+.gst b{display:inline-flex;width:1.35rem;height:1.35rem;border-radius:9999px;align-items:center;justify-content:center;background:#334155;color:#e2e8f0}
+.gst.s1{border-color:#b45309;color:#fcd34d}.gst.s1 b{background:#f59e0b;color:#1c1204}
+.gst.s2{border-color:#047857;color:#6ee7b7}.gst.s2 b{background:#10b981;color:#06281d}
+.glrow{display:flex;gap:.5rem;align-items:center;justify-content:space-between;padding:.6rem .75rem;border:1px solid #1e293b;border-radius:.6rem;background:#0f172a}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.2/mammoth.browser.min.js"></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
@@ -106,7 +115,28 @@
         </div>
     </div>
 
-    <!-- Main Container -->
+    
+<div id="glBar" class="bg-[#0b1220] border-b border-slate-800"><div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
+ <div class="flex flex-wrap items-center gap-2">
+  <i class="fa-solid fa-folder-open text-emerald-400"></i>
+  <input id="glName" class="input-dark text-sm" style="width:16rem" placeholder="Tên hồ sơ (VD: Game X - G1)" oninput="glSched()">
+  <span id="glStat" class="text-xs text-slate-400"></span>
+  <button id="glReauth" class="gb hidden" style="background:#b45309" onclick="glReauth()">Cấp quyền ghi file</button>
+  <div class="ml-auto flex flex-wrap gap-2">
+   <button class="gb" onclick="glList()"><i class="fa-solid fa-layer-group"></i> Hồ sơ & phiên bản</button>
+   <button class="gb" onclick="document.getElementById('glOpen').click()"><i class="fa-solid fa-folder-open"></i> Mở file</button>
+   <button class="gb" onclick="glQuick('')"><i class="fa-solid fa-bolt"></i> Chèn nhanh</button>
+   <button class="gb" onclick="glLink()"><i class="fa-solid fa-link"></i> Liên kết file (Drive)</button>
+   <button class="gb" onclick="glExport()"><i class="fa-solid fa-download"></i> Sao lưu .json</button>
+   <button class="gb" style="background:#1d4ed8" onclick="glDocs()"><i class="fa-brands fa-google-drive"></i> Sang Google Docs</button>
+   <input type="file" id="glOpen" class="hidden" accept=".json,.docx,.txt,.md,.html,.htm" onchange="glFile(this)">
+  </div></div>
+ <div id="glSteps" class="flex gap-2 overflow-x-auto pb-1"></div>
+ <div class="h-1.5 bg-slate-800 rounded"><div id="glProg" class="h-1.5 bg-emerald-500 rounded transition-all" style="width:0"></div></div>
+</div></div>
+<div id="glModal" class="hidden fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4" onclick="if(event.target===this)glClose()"><div id="glBox" class="bg-slate-900 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[85vh] overflow-auto p-5 text-sm"></div></div>
+<div id="glToast" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] bg-emerald-600 text-white text-sm px-4 py-2 rounded-lg shadow-lg"></div>
+<!-- Main Container -->
     <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-1">
 
         <!-- VIEW 1: SOẠN THẢO HỒ SƠ (GENERATOR) -->
@@ -1268,5 +1298,101 @@
         renderImageGallery();
         switchGameTab('G1');
     </script>
+
+<script>
+const $=id=>document.getElementById(id),esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STEPS=['Chọn loại','Chủ thể','Tác phẩm','Kỹ thuật','Vận hành','Hình ảnh','Rà soát','Nộp hồ sơ'];
+let P=null,glT=null;
+const DB=new Promise((ok,no)=>{const r=indexedDB.open('gl_pro',1);r.onupgradeneeded=()=>r.result.createObjectStore('p',{keyPath:'id'});r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const tx=(m,f)=>DB.then(d=>new Promise((ok,no)=>{const q=f(d.transaction('p',m).objectStore('p'));q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)}));
+const dbAll=()=>tx('readonly',s=>s.getAll()),dbPut=p=>tx('readwrite',s=>s.put(p)),dbDel=i=>tx('readwrite',s=>s.delete(i));
+const FIELDS=()=>[...document.querySelectorAll('#sec1 [id],#sec2 [id],#sec3 [id],#sec4 [id]')].filter(e=>/^(INPUT|TEXTAREA|SELECT)$/.test(e.tagName)&&e.id!=='gameGroupInput');
+const newP=()=>({id:'p'+Date.now(),name:'',type:'G1',f:{},img:[],checks:{},ok:0,rev:0,t:Date.now(),vers:[]});
+const st=m=>$('glStat').textContent=m;
+function toast(m){const t=$('glToast');t.textContent=m;t.classList.remove('hidden');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('hidden'),3500)}
+function modal(h){$('glBox').innerHTML=h;$('glModal').classList.remove('hidden')}
+function glClose(){$('glModal').classList.add('hidden')}
+const pack=()=>({gl:1,name:P.name,type:P.type,f:P.f,img:P.img,checks:P.checks,t:P.t});
+function collect(){P.f={};FIELDS().forEach(e=>P.f[e.id]=e.value);P.img=attachedImages;P.name=$('glName').value.trim()}
+function glSched(){clearTimeout(glT);st('Đang chỉnh sửa…');glT=setTimeout(save,700);refresh()}
+async function save(){if(!P)return;collect();const n=Date.now();P.t=n;
+ if(!P.vers[0]||n-P.vers[0].t>6e5){P.vers.unshift({t:n,label:'Tự động',f:{...P.f}});P.vers.length=Math.min(P.vers.length,20)}
+ try{await dbPut(P);st('Đã lưu trong trình duyệt '+new Date(n).toLocaleTimeString('vi-VN'))}catch(e){st('Lỗi lưu: '+e.message)}
+ if(P.h)await toFile();refresh()}
+async function toFile(){try{if(await P.h.queryPermission({mode:'readwrite'})!=='granted'){$('glReauth').classList.remove('hidden');return}
+ $('glReauth').classList.add('hidden');const w=await P.h.createWritable();await w.write(JSON.stringify(pack()));await w.close();
+ st('Đã lưu: trình duyệt + file '+P.h.name+' '+new Date().toLocaleTimeString('vi-VN'))}catch(e){st('Lỗi ghi file: '+e.message)}}
+async function glReauth(){if(await P.h.requestPermission({mode:'readwrite'})==='granted')save()}
+async function glLink(){if(!window.showSaveFilePicker)return alert('Trình duyệt chưa hỗ trợ liên kết file tự động. Hãy dùng Chrome/Edge, hoặc bấm "Sao lưu .json".');
+ try{P.h=await showSaveFilePicker({suggestedName:'GL_'+(P.name||'hoso')+'.json',types:[{description:'Hồ sơ GameLicense',accept:{'application/json':['.json']}}]});
+ await save();toast('Đã liên kết. Mẹo: chọn file nằm trong thư mục Google Drive for Desktop để tự đồng bộ lên Drive.')}catch(e){}}
+function glExport(){collect();saveAs(new Blob([JSON.stringify(pack())],{type:'application/json'}),'GL_'+(P.name||'hoso').replace(/[^\w\u00C0-\u1EF9]+/g,'_')+'.json')}
+function loadP(p){P=p;localStorage.setItem('gl_last',p.id);FIELDS().forEach(e=>{if(p.f[e.id]!==undefined)e.value=p.f[e.id];else if(e.tagName!=='SELECT')e.value=''});
+ attachedImages=p.img||[];renderImageGallery();$('glName').value=p.name||'';switchGameTab(p.type||'G1');refresh();st(p.h?'Đã mở (file liên kết: '+p.h.name+')':'Đã mở hồ sơ')}
+async function glOpenP(id){await save();loadP((await dbAll()).find(p=>p.id===id));glClose()}
+async function glNew(){await save();const p=newP();await dbPut(p);loadP(p);glClose();glWiz()}
+async function glDup(id){const p={...(await dbAll()).find(x=>x.id===id),id:'p'+Date.now(),h:undefined,vers:[]};p.name+=' (bản sao)';await dbPut(p);glList()}
+async function glDel(id){if(!confirm('Xóa hồ sơ này khỏi trình duyệt?'))return;await dbDel(id);if(P.id===id){const a=await dbAll();loadP(a[0]||newP())}glList()}
+async function glList(){await save();const all=(await dbAll()).sort((a,b)=>b.t-a.t);
+ modal(`<div class="flex justify-between mb-3"><h3 class="font-bold text-white">Hồ sơ đã lưu (${all.length})</h3><button class="gb" onclick="glNew()">+ Hồ sơ mới</button></div><div class="space-y-2">`+
+ all.map(p=>`<div class="glrow"><div><b class="text-white">${esc(p.name||'(chưa đặt tên)')}</b>${p.id===P.id?' <span class="text-emerald-400 text-xs">đang mở</span>':''}<div class="text-xs text-slate-400">${p.type} · ${new Date(p.t).toLocaleString('vi-VN')}${p.h?' · liên kết file':''}</div></div><div class="flex gap-1"><button class="gb" onclick="glOpenP('${p.id}')">Mở</button><button class="gb" onclick="glDup('${p.id}')">Nhân bản</button><button class="gb" onclick="glDel('${p.id}')">Xóa</button></div></div>`).join('')+
+ `</div><div class="flex justify-between mt-5 mb-2"><h3 class="font-bold text-white">Phiên bản của hồ sơ đang mở</h3><button class="gb" onclick="glMark()">Lưu mốc phiên bản</button></div><div class="space-y-2">`+
+ (P.vers.map((v,i)=>`<div class="glrow"><span class="text-xs text-slate-300">${new Date(v.t).toLocaleString('vi-VN')} · ${esc(v.label)}</span><button class="gb" onclick="glRestore(${i})">Khôi phục</button></div>`).join('')||'<p class="text-xs text-slate-500">Chưa có.</p>')+'</div>')}
+async function glMark(){const l=prompt('Tên mốc (VD: Bản gửi duyệt lần 1):');if(!l)return;collect();P.vers.unshift({t:Date.now(),label:l,f:{...P.f}});await save();glList()}
+async function glRestore(i){if(!confirm('Khôi phục phiên bản này? Bản hiện tại sẽ được giữ lại trong danh sách phiên bản.'))return;collect();P.vers.unshift({t:Date.now(),label:'Trước khi khôi phục',f:{...P.f}});P.f={...P.vers[i+1].f};await dbPut(P);loadP(P);glClose();save()}
+/* ---- Quy trình ---- */
+function secProg(id){const e=[...document.querySelectorAll('#'+id+' input,#'+id+' textarea,#'+id+' select')].filter(x=>x.id!=='gameGroupInput'&&(x.parentElement.querySelector('label')||{textContent:''}).textContent.includes('*'));return[e.filter(x=>x.value.trim()).length,e.length]}
+function ckItems(){return[...new DOMParser().parseFromString(gameConfigs[P.type].guideHtml,'text/html').querySelectorAll('ol li')].map(l=>l.textContent.trim())}
+function refresh(){if(!P)return;let done=0;const S=[],lab=[];
+ S[0]=P.ok?2:0;for(let i=1;i<=4;i++){const[n,t]=secProg('sec'+i);S[i]=n&&n===t?2:n?1:0;lab[i]=n+'/'+t}
+ S[5]=attachedImages.length?2:0;lab[5]=attachedImages.length+' ảnh';S[6]=P.rev?2:0;
+ const it=ckItems(),c=it.filter((_,i)=>P.checks[P.type+i]).length;S[7]=it.length&&c===it.length?2:c?1:0;lab[7]=c+'/'+it.length;
+ S.forEach(v=>done+=v==2?1:v==1?.5:0);
+ $('glSteps').innerHTML=STEPS.map((n,i)=>`<button class="gst s${S[i]}" onclick="glStep(${i+1})"><b>${S[i]==2?'✓':i+1}</b>${n}${lab[i]?` <span class="opacity-70">${lab[i]}</span>`:''}</button>`).join('');
+ $('glProg').style.width=Math.round(done/8*100)+'%'}
+function glStep(i){if(i==1)return glWiz();if(i==7)return switchView('preview');if(i==8)return switchView('guide');
+ switchView('generator');const id='sec'+(i-1),el=$(id);if(el.classList.contains('hidden'))toggleAccordion(id);el.parentElement.scrollIntoView({behavior:'smooth',block:'start'})}
+function glWiz(){const c=t=>`<button data-t="${t}" onclick="glPick('${t}')" class="wz text-left p-3 rounded-lg border border-slate-700 hover:border-emerald-500 bg-slate-800/60 w-full"><b class="text-white">${t==='SHTT'?'Bản quyền SHTT (Copyright)':'Game '+t}</b><div class="text-xs text-slate-400">${gameConfigs[t].groupText}</div></button>`;
+ modal(`<h3 class="font-bold text-white mb-1">Bước 1: Chọn loại hồ sơ cần làm</h3><p class="text-xs text-slate-400 mb-3">Trả lời nhanh để hệ thống gợi ý (theo định nghĩa G1–G4 đang dùng trong công cụ này; hãy đối chiếu quy định hiện hành khi nộp).</p><div class="flex flex-wrap gap-4 text-xs mb-2 text-slate-200"><label><input type="checkbox" id="wq1" onchange="glRec()"> Có kết nối máy chủ</label><label><input type="checkbox" id="wq2" onchange="glRec()"> Người chơi tương tác với nhau</label></div><p id="wrec" class="text-xs text-emerald-400 mb-3"></p><div class="space-y-2">${['G1','G2','G3','G4','SHTT'].map(c).join('')}</div>`);glRec()}
+function glRec(){const a=$('wq1').checked,b=$('wq2').checked,t=a?(b?'G1':'G2'):(b?'G3':'G4');$('wrec').textContent='Gợi ý: Game '+t;document.querySelectorAll('.wz').forEach(x=>x.style.boxShadow=x.dataset.t===t?'0 0 0 2px #10b981':'none')}
+function glPick(t){P.ok=1;P.type=t;switchGameTab(t);glClose();save()}
+/* ---- Mở file & chèn nhanh ---- */
+const KV={'Tên chủ sở hữu / Doanh nghiệp':'companyName','Mã số doanh nghiệp / CCCD':'taxCode','Người đại diện / Tác giả':'legalRep','Địa chỉ liên hệ':'companyAddress','Số Giấy phép / Số đăng ký liên quan':'licenseNumber','Điện thoại & Email liên hệ':'contactInfo','Tên tác phẩm / Trò chơi':'gameName','Nền tảng phát hành / Công bố':'gamePlatforms','Nguồn gốc & Bản quyền':'copyrightInfo'};
+const ML={'Mô tả nội dung':'gameStory','Chi tiết cấu trúc':'gamePlay','Phương án bảo vệ':'contentControl','Chi tiết hạ tầng':'serverInfo','Phương án bảo mật':'securityPlan','Phương án thương mại':'paymentPlan','Cam kết pháp lý':'supportPlan'};
+function parseDoc(txt){const m={};let cur=null;txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(l=>{const t=l.replace(/^\d+\.\s*/,'');
+ const kv=Object.keys(KV).find(k=>t.startsWith(k+':'));if(kv){let v=t.slice(kv.length+1).trim();cur=null;if(/^\[.*\]$/.test(v))return;
+  if(KV[kv]==='legalRep'){const r=v.match(/^(.*)\s\((.*)\)$/);if(r){m.legalRep=r[1];m.repTitle=r[2];return}}m[KV[kv]]=v;return}
+ const ml=Object.keys(ML).find(k=>t.startsWith(k));if(ml&&/:$/.test(t)){cur=ML[ml];m[cur]='';return}
+ if(/^[IVX]+\.\s/.test(l)||/^ĐẠI DIỆN/.test(l)||/^Hình \d/.test(l)){cur=null;return}
+ if(cur&&!/^\(Chưa nhập/.test(l))m[cur]+=(m[cur]?'\n':'')+l});return m}
+async function glFile(inp){const f=inp.files[0];inp.value='';if(!f)return;const x=f.name.split('.').pop().toLowerCase();let txt='';
+ try{if(x==='json'){const o=JSON.parse(await f.text());if(o.gl!==1)throw Error('Không phải file hồ sơ GameLicense');await save();const p={...newP(),name:o.name||f.name,type:o.type,f:o.f,img:o.img||[],checks:o.checks||{},ok:1};await dbPut(p);loadP(p);return toast('Đã mở hồ sơ từ file')}
+ if(x==='docx'){if(!window.mammoth)throw Error('Chưa tải được thư viện đọc .docx (cần Internet)');txt=(await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value}
+ else if(x==='html'||x==='htm')txt=new DOMParser().parseFromString(await f.text(),'text/html').body.textContent;else txt=await f.text();
+ const m=parseDoc(txt),n=Object.keys(m).length;
+ if(n>=3&&confirm('Nhận diện được '+n+' mục theo mẫu file Word do công cụ này xuất. Nạp vào hồ sơ đang mở? (Bấm Hủy để chèn thủ công từng đoạn)')){Object.entries(m).forEach(([k,v])=>{if($(k))$(k).value=v});glSched();return toast('Đã nạp '+n+' mục')}
+ glQuick(txt)}catch(e){alert('Không mở được file: '+e.message)}}
+function glQuick(txt){modal(`<h3 class="font-bold text-white mb-2">Chèn nhanh nội dung có sẵn</h3><p class="text-xs text-slate-400 mb-2">Dán hoặc mở file vào ô dưới, bôi đen đoạn cần lấy (không bôi đen = lấy toàn bộ), chọn ô đích rồi bấm Chèn. Có thể chèn nhiều lần.</p><textarea id="qTxt" rows="9" class="input-dark text-xs">${esc(txt)}</textarea><div class="flex flex-wrap gap-2 mt-3 items-center"><select id="qTo" class="input-dark text-xs" style="width:auto;max-width:20rem">${FIELDS().filter(e=>e.tagName!=='SELECT').map(e=>`<option value="${e.id}">${esc((e.parentElement.querySelector('label')||{textContent:e.id}).textContent.replace('*','').trim())}</option>`).join('')}</select><select id="qMode" class="input-dark text-xs" style="width:auto"><option value="a">Chèn thêm vào cuối</option><option value="r">Thay thế</option></select><button class="gb" style="background:#059669" onclick="glIns()">Chèn</button><button class="gb" onclick="glClose()">Đóng</button></div>`)}
+function glIns(){const t=$('qTxt'),s=t.selectionStart!==t.selectionEnd?t.value.slice(t.selectionStart,t.selectionEnd):t.value,el=$($('qTo').value);if(!s.trim())return;
+ el.value=$('qMode').value==='r'||!el.value?s.trim():el.value+'\n'+s.trim();glSched();toast('Đã chèn vào: '+$('qTo').selectedOptions[0].text)}
+/* ---- Google Docs ---- */
+async function glDocs(){renderDocumentPreview();const h=$('a4PreviewContainer').innerHTML;let ok=false;
+ try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([h],{type:'text/html'}),'text/plain':new Blob([$('a4PreviewContainer').innerText],{type:'text/plain'})})]);ok=true}catch(e){
+  const d=document.createElement('div');d.innerHTML=h;d.style.cssText='position:fixed;left:-9999px';document.body.appendChild(d);const r=document.createRange();r.selectNodeContents(d);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy');s.removeAllRanges();d.remove()}
+ P.rev=1;save();if(ok){toast('Đã sao chép hồ sơ. Trong Google Docs nhấn Ctrl+V để dán.');window.open('https://docs.new','_blank')}else alert('Không sao chép được. Hãy dùng "Xuất File Word" rồi tải lên Google Drive.')}
+/* ---- Hook vào code gốc ---- */
+const _sg=switchGameTab;switchGameTab=function(t){_sg(t);if(!P)return;P.type=t;const it=ckItems();
+ $('guideContentArea').insertAdjacentHTML('afterbegin',`<div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg"><h3 class="font-bold text-white mb-2"><i class="fa-solid fa-list-check text-emerald-400"></i> Danh mục cần chuẩn bị (tích để theo dõi)</h3>${it.map((x,i)=>`<label class="flex gap-2 text-xs text-slate-200 py-1"><input type="checkbox" ${P.checks[t+i]?'checked':''} onchange="P.checks['${t}${i}']=this.checked;glSched()"> ${esc(x)}</label>`).join('')}</div>`);glSched()};
+const _sv=switchView;switchView=function(v){_sv(v);if(v==='preview'&&P&&!P.rev){P.rev=1;glSched()}};
+const _ri=renderImageGallery;renderImageGallery=function(){_ri();glSched()};
+const _ca=clearAllFields;clearAllFields=function(){_ca();glSched()};
+document.addEventListener('input',e=>{if(e.target.closest('#sec1,#sec2,#sec3,#sec4'))glSched()});
+document.addEventListener('change',e=>{if(e.target.closest('#sec2'))glSched()});
+addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+for(let n=1;n<=5;n++)$('sec'+n).previousElementSibling.querySelector('span').insertAdjacentHTML('afterbegin','<b class="gl-n">'+(n+1)+'</b>');
+(async()=>{try{const a=await dbAll(),id=localStorage.getItem('gl_last');let p=a.find(x=>x.id===id)||a.sort((x,y)=>y.t-x.t)[0];
+ if(p){loadP(p);if(p.h&&await p.h.queryPermission({mode:'readwrite'})!=='granted')$('glReauth').classList.remove('hidden')}
+ else{p=newP();await dbPut(p);loadP(p);glWiz()}}catch(e){P=newP();loadP(P);st('Không dùng được bộ nhớ trình duyệt: hãy dùng "Sao lưu .json" thường xuyên')}})();
+</script>
 </body>
 </html>
